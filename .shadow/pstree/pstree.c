@@ -2,9 +2,24 @@
 #include <assert.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <stdarg.h>
 #include <getopt.h>
 
 
+#define COMM_SIZE 1024
+
+typedef struct node {
+  char comm[COMM_SIZE];
+  struct node* children[0];
+}node;
+
+void set_node(pid_t id) {
+  char* id_s;
+  asprintf(&id_s, "%d", id);
+  char* path;
+  sprintf(path, "/proc/%s/stat", id_s);
+}
 
 int main(int argc, char *argv[]) {
   int opt;
