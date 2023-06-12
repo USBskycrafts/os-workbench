@@ -1,6 +1,6 @@
+#define _GNU_SOURCE
 #include <stddef.h>
 #include <string.h>
-#define _GNU_SOURCE
 #include <stdio.h>
 #include <assert.h>
 #include <unistd.h>
