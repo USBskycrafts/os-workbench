@@ -6,6 +6,7 @@
 #include <stdarg.h>
 #include <getopt.h>
 
+#define _GNU_SOURCE
 
 #define COMM_SIZE 1024
 
