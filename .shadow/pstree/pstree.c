@@ -14,12 +14,15 @@ int main(int argc, char *argv[]) {
   while((opt = getopt_long(argc, argv, "p::n::v::", opts, NULL)) != -1) {
     switch(opt) {
     case 'p': {
+      fprintf(stderr, "shows pids\n");
       break;
     }
     case 'n': {
+      fprintf(stderr, "sort pids\n");
       break;
     }
     case 'v': {
+      fprintf(stderr, "pstree version 0.0.1\n");
       break;
     }
     case '?':
