@@ -1,4 +1,3 @@
-
 #define _GNU_SOURCE
 #include <stdio.h>
 #include <assert.h>
@@ -19,7 +18,7 @@ void set_node(pid_t id) {
   char* id_s;
   asprintf(&id_s, "%d", id);
   char* path;
-  sprintf(path, "/proc/%s/stat", id_s);
+  asprintf(&path, "/proc/%s/stat", id_s);
 }
 
 int main(int argc, char *argv[]) {
