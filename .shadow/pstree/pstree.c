@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <getopt.h>
 
+
+
 int main(int argc, char *argv[]) {
   int opt;
   static const struct option opts[3] = {
@@ -26,7 +28,7 @@ int main(int argc, char *argv[]) {
     case '?':
     default: {
       fprintf(stderr, "please check the arguments\n");
-      exit(-1);
+      exit(127);
     }
     }
   }
