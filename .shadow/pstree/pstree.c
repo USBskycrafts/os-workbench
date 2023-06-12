@@ -1,3 +1,5 @@
+
+#define _GNU_SOURCE
 #include <stdio.h>
 #include <assert.h>
 #include <unistd.h>
@@ -5,8 +7,6 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <getopt.h>
-
-#define _GNU_SOURCE
 
 #define COMM_SIZE 1024
 
