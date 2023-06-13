@@ -1,5 +1,6 @@
 #define _GNU_SOURCE
 #include <stddef.h>
+#include <dirent.h>
 #include <string.h>
 #include <stdio.h>
 #include <assert.h>
@@ -10,11 +11,6 @@
 #include <stdarg.h>
 #include <getopt.h>
 
-/*
-* TO DO:
-* 1. work list is needed when generating node because we can get child before parent
-* 
-*/
 
 #define NODE_SIZE 4096
 
@@ -28,16 +24,17 @@ struct node {
 struct node* nodes[NODE_SIZE];
 static off_t offset;
 
-off_t craete_node(pid_t pid) {
+
+off_t create_node(pid_t pid) {
   char* pid_s;
   asprintf(&pid_s, "%d", pid);
   char* path;
   asprintf(&path, "/proc/%s/stat", pid_s);
   pid_t ppid;
-  char comm[512];
+  char comm[513];
   char state;
   FILE* f = fopen(path, "r");
-  fscanf(f, "%d %s %c %d", &pid, comm, &state, &ppid);
+  fscanf(f, "%d %512s %c %d", &pid, comm, &state, &ppid);
   fclose(f);
   off_t o = ++offset;
   struct node* n = (struct node*)malloc(sizeof(struct node));
@@ -47,6 +44,25 @@ off_t craete_node(pid_t pid) {
   memcpy((void*)n->comm, comm, sizeof(comm));
   nodes[o] = n;
   return o;
+}
+
+void recur_scan() {
+  DIR* dir = opendir("proc");
+  struct dirent* ptr;
+  while((ptr = readdir(dir)) != NULL) {
+    if (strcmp(ptr->d_name, ".") == 0 || strcmp(ptr->d_name, "..") == 0) {
+        continue;
+    }
+    char* num;
+    asprintf(&num, "%s", ptr->d_name);
+    char* next;
+    int pid = strtol(num, &next, 10);
+    if((next == num) || (*next != '\0')) {
+      continue;
+    }
+    create_node(pid);
+  }
+  closedir(dir);
 }
 
 
