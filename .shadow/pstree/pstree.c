@@ -89,6 +89,7 @@ void build_tree() {
       }
     }
   }
+  printf("finish\n");
 }
 
 
