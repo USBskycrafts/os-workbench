@@ -119,6 +119,6 @@ int main(int argc, char *argv[]) {
   }
   assert(!argv[argc]);
   recur_scan();
-  build_tree();
+  //build_tree();
   return 0;
 }
