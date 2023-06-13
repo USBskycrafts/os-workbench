@@ -16,10 +16,38 @@
 * 
 */
 
+#define NODE_SIZE 4096
+
 struct node {
   pid_t pid, ppid;
-  const char* const comm;
+  const char* comm;
+  off_t size;
+  off_t children[0];
 };
+
+struct node* nodes[NODE_SIZE];
+static off_t offset;
+
+off_t craete_node(pid_t pid) {
+  char* pid_s;
+  asprintf(&pid_s, "%d", pid);
+  char* path;
+  asprintf(&path, "/proc/%s/stat", pid_s);
+  pid_t ppid;
+  char comm[512];
+  char state;
+  FILE* f = fopen(path, "r");
+  fscanf(f, "%d %s %c %d", &pid, comm, &state, &ppid);
+  fclose(f);
+  off_t o = ++offset;
+  struct node* n = (struct node*)malloc(sizeof(struct node));
+  n->pid = pid;
+  n->ppid = ppid;
+  n->comm = malloc(sizeof(comm));
+  memcpy((void*)n->comm, comm, sizeof(comm));
+  nodes[o] = n;
+  return o;
+}
 
 
 
