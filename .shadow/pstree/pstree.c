@@ -79,12 +79,12 @@ void build_tree() {
       }
       if(nodes[j]->ppid == nodes[i]->pid) {
         nodes[i]->size++;
-        nodes[i] = realloc(nodes[i], nodes[i]->size * sizeof(off_t) + sizeof(struct node));
-        nodes[i]->children[nodes[i]->size - 1] = j;
+        //nodes[i] = realloc(nodes[i], nodes[i]->size * sizeof(off_t) + sizeof(struct node));
+        //nodes[i]->children[nodes[i]->size - 1] = j;
       } else if(nodes[j]->pid == nodes[i]->ppid) {
         nodes[j]->size++;
-        nodes[j] = realloc(nodes[j], nodes[j]->size * sizeof(off_t) + sizeof(struct node));
-        nodes[j]->children[nodes[j]->size - 1] = i;
+        //nodes[j] = realloc(nodes[j], nodes[j]->size * sizeof(off_t) + sizeof(struct node));
+        //nodes[j]->children[nodes[j]->size - 1] = i;
       }
     }
   }
