@@ -66,6 +66,7 @@ void recur_scan() {
     }
     create_node(pid);
   }
+  assert(offset < NODE_SIZE);
   closedir(dir);
 }
 
@@ -119,6 +120,6 @@ int main(int argc, char *argv[]) {
   }
   assert(!argv[argc]);
   recur_scan();
-  //build_tree();
+  build_tree();
   return 0;
 }
