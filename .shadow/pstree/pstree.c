@@ -78,7 +78,6 @@ void build_tree() {
       if(i == j) {
         continue;
       }
-      printf("%ld %ld\n", i, j);
       if(nodes[j]->ppid == nodes[i]->pid) {
         nodes[i]->size++;
         nodes[i] = realloc(nodes[i], nodes[i]->size * sizeof(off_t) + sizeof(struct node));
