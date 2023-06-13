@@ -12,7 +12,7 @@
 #include <getopt.h>
 
 
-#define NODE_SIZE 4096
+#define NODE_SIZE 40960
 
 struct node {
   pid_t pid, ppid;
