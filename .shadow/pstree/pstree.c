@@ -72,7 +72,7 @@ void recur_scan() {
 
 // build the node tree
 void build_tree() {
-  assert(offset > NODE_SIZE);
+  assert(offset < NODE_SIZE);
   for(off_t i = 0; i < offset; i++) {
     for(off_t j = 0; j < offset; j++) {
       if(i == j) {
