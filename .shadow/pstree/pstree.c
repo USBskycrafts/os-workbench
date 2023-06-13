@@ -51,7 +51,7 @@ off_t create_node(pid_t pid) {
 
 // scan the proc directory
 void recur_scan() {
-  DIR* dir = opendir("proc");
+  DIR* dir = opendir("/proc");
   struct dirent* ptr;
   while((ptr = readdir(dir)) != NULL) {
     if (strcmp(ptr->d_name, ".") == 0 || strcmp(ptr->d_name, "..") == 0) {
