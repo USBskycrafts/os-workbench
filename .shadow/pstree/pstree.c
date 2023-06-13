@@ -66,7 +66,6 @@ void recur_scan() {
     }
     create_node(pid);
   }
-  printf("close\n");
   closedir(dir);
 }
 
