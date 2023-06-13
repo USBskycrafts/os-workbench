@@ -57,6 +57,7 @@ void recur_scan() {
     if (strcmp(ptr->d_name, ".") == 0 || strcmp(ptr->d_name, "..") == 0) {
         continue;
     }
+    printf("%s\n", ptr->d_name);
     char* num;
     asprintf(&num, "%s", ptr->d_name);
     char* next;
