@@ -59,6 +59,7 @@ void recur_scan() {
     }
     char* num;
     asprintf(&num, "%s", ptr->d_name);
+    printf("%s\n", num);
     char* next;
     int pid = strtol(num, &next, 10);
     if((next == num) || (*next != '\0')) {
