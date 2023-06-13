@@ -37,7 +37,7 @@ off_t create_node(pid_t pid) {
   FILE* f = fopen(path, "r");
   fscanf(f, "%d %512s %c %d", &pid, comm, &state, &ppid);
   fclose(f);
-  off_t o = ++offset;
+  off_t o = offset++;
   struct node* n = (struct node*)malloc(sizeof(struct node));
   n->pid = pid;
   n->ppid = ppid;
