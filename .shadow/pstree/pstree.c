@@ -109,6 +109,10 @@ char* print_tree(struct node* cur) {
       tokens[i] = strtok(NULL, "\n");
       size++;
     }
+    free(token);
+    free(sub);
+    token = NULL;
+    sub = NULL;
     for(int j = 0; j < size; j++) {
       char* tmp = malloc(strlen(cur->comm) + 3 + strlen(tokens[j]) + 2);
       if(i == 0 && j == 0) {
