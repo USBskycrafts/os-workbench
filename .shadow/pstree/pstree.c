@@ -94,8 +94,9 @@ void build_tree() {
 
 char* print_tree(struct node* cur) {
   if(cur->size == 0) {
-    char* ret = malloc(strlen(cur->comm) + 2);
+    char* ret = malloc(strlen(cur->comm) + 3);
     strcpy(ret, cur->comm);
+    strcat(ret, "\n");
     return ret;
   }
   char* tree = malloc(1);
