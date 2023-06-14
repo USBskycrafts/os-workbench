@@ -92,6 +92,63 @@ void build_tree() {
 }
 
 
+char* print_tree(struct node* cur) {
+  if(cur->size == 0) {
+    char* ret = malloc(strlen(cur->comm));
+    strcpy(ret, cur->comm);
+    return ret;
+  }
+  char* tree = malloc(1);
+  tree[0] = '\0';
+  for(int i = 0; i < cur->size; i++) {
+    char *sub = print_tree(nodes[cur->children[i]]);
+    char* token = strtok(sub, "\n");
+    int size = 0;
+    char* tokens[NODE_SIZE];
+    while(token != NULL) {
+      tokens[i] = strtok(NULL, "\n");
+      size++;
+    }
+    for(int j = 0; j < size; j++) {
+      char* tmp = malloc(strlen(cur->comm) + 3 + strlen(tokens[j]) + 2);
+      if(i == 0 && j == 0) {
+        tmp[0] = '\0';
+        strcat(tmp, cur->comm);
+        strcat(tmp, "---");
+        strcat(tmp, tokens[j]);
+        tree = realloc(tree, strlen(tree) + strlen(tmp) + 2);
+        strcat(tree, tmp);
+      } else if(j == 0) {
+        tmp[0] = '\0';
+        char* space = malloc(strlen(cur->comm) + 2);
+        for(int i = 0; i < strlen(cur->comm); i++) {
+          space[i] = ' ';
+        }
+        strcat(tmp, space);
+        free(space);
+        strcat(tmp, " |-");
+        strcat(tmp, tokens[j]);
+        tree = realloc(tree, strlen(tree) + strlen(tmp) + 2);
+        strcat(tree, tmp);
+      } else {
+        tmp[0] = '\0';
+        char* space = malloc(strlen(cur->comm) + 2);
+        for(int i = 0; i < strlen(cur->comm); i++) {
+          space[i] = ' ';
+        }
+        strcat(tmp, space);
+        free(space);
+        strcat(tmp, " | ");
+        strcat(tmp, tokens[j]);
+        tree = realloc(tree, strlen(tree) + strlen(tmp) + 2);
+        strcat(tree, tmp);
+      }
+      free(tmp);
+    }
+  }
+  return tree;
+}
+
 
 int main(int argc, char *argv[]) {
   int opt;
@@ -122,5 +179,11 @@ int main(int argc, char *argv[]) {
   assert(!argv[argc]);
   recur_scan();
   build_tree();
+  for(int i = 0; i < offset; i++) {
+    if(nodes[i]->pid == 1) {
+      printf("%s", print_tree(nodes[i]));
+      break;
+    }
+  }
   return 0;
 }
