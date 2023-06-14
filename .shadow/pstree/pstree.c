@@ -183,11 +183,11 @@ int main(int argc, char *argv[]) {
   assert(!argv[argc]);
   recur_scan();
   build_tree();
-  for(int i = 0; i < offset; i++) {
-    if(nodes[i]->pid == 1) {
-      printf("%s", print_tree(nodes[i]));
-      break;
-    }
-  }
+  // for(int i = 0; i < offset; i++) {
+  //   if(nodes[i]->pid == 1) {
+  //     printf("%s", print_tree(nodes[i]));
+  //     break;
+  //   }
+  // }
   return 0;
 }
