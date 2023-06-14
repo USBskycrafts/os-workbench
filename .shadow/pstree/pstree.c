@@ -102,6 +102,7 @@ char* print_tree(struct node* cur) {
   tree[0] = '\0';
   for(int i = 0; i < cur->size; i++) {
     char *sub = print_tree(nodes[cur->children[i]]);
+    printf("%s\n", sub);
     char* token = strtok(sub, "\n");
     int size = 0;
     char* tokens[NODE_SIZE];
@@ -183,11 +184,11 @@ int main(int argc, char *argv[]) {
   assert(!argv[argc]);
   recur_scan();
   build_tree();
-  // for(int i = 0; i < offset; i++) {
-  //   if(nodes[i]->pid == 1) {
-  //     printf("%s", print_tree(nodes[i]));
-  //     break;
-  //   }
-  // }
+  for(int i = 0; i < offset; i++) {
+    if(nodes[i]->pid == 1) {
+      printf("%s", print_tree(nodes[i]));
+      break;
+    }
+  }
   return 0;
 }
