@@ -93,7 +93,6 @@ void build_tree() {
 
 
 char* print_tree(struct node* cur) {
-  printf("%ld\n", offset);
   if(cur->size == 0) {
     char* ret = malloc(strlen(cur->comm) + 2);
     strcpy(ret, cur->comm);
