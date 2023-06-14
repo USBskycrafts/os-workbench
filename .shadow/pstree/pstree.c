@@ -93,6 +93,7 @@ void build_tree() {
 
 
 char* print_tree(struct node* cur) {
+  printf("%ld\n", offset);
   if(cur->size == 0) {
     char* ret = malloc(strlen(cur->comm) + 2);
     strcpy(ret, cur->comm);
@@ -102,7 +103,6 @@ char* print_tree(struct node* cur) {
   tree[0] = '\0';
   for(int i = 0; i < cur->size; i++) {
     char *sub = print_tree(nodes[cur->children[i]]);
-    printf("%s\n", sub);
     char* token = strtok(sub, "\n");
     int size = 0;
     char* tokens[NODE_SIZE];
