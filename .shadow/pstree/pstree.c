@@ -105,6 +105,7 @@ char* print_tree(struct node* cur) {
     char *sub = print_tree(nodes[cur->children[i]]);
     int size = 0;
     char* tokens[NODE_SIZE];
+    memset(tokens, 0, sizeof(tokens));
     tokens[0] = malloc(strlen(sub) + 1);
     strcpy(tokens[0], sub);
     char* token = strtok(sub, "\n");
