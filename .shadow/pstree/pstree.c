@@ -120,7 +120,7 @@ char* print_tree(struct node* cur) {
       token = strtok(NULL, "\n");
     }
     for(int j = 0; j < size; j++) {
-      char tmp[strlen(cur->comm) + 3 + strlen(tokens[j]) + 5];
+      char* tmp = malloc(strlen(cur->comm) + 3 + strlen(tokens[j]) + 5);
       if(i == 0 && j == 0) {
         tmp[0] = '\0';
         strcat(tmp, cur->comm);
@@ -155,6 +155,7 @@ char* print_tree(struct node* cur) {
         tree = realloc(tree, strlen(tree) + strlen(tmp) + 2);
         strcat(tree, tmp);
       }
+      free(tmp);
     }
     for(int j = 0; j < size; j++) {
       free(tokens[j]);
