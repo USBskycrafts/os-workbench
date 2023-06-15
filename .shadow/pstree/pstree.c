@@ -123,7 +123,7 @@ char* print_tree(struct node* cur) {
         strcat(tmp, cur->comm);
         strcat(tmp, "---");
         strcat(tmp, tokens[j]);
-        tree = realloc(tree, strlen(tree) + strlen(tmp) + 2);
+        tree = realloc(tree, strlen(tree) + strlen(tmp) + 5);
         strcat(tree, tmp);
       } else if(j == 0) {
         tmp[0] = '\0';
