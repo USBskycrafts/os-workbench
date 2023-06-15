@@ -152,6 +152,9 @@ char* print_tree(struct node* cur) {
       }
       free(tmp);
     }
+    for(int j = 0; j < size; j++) {
+      free(tokens[j]);
+    }
   }
   return tree;
 }
