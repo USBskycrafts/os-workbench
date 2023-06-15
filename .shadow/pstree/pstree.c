@@ -109,6 +109,7 @@ char* print_tree(struct node* cur) {
     strcpy(tokens[0], sub);
     char* token = strtok(sub, "\n");
     while(token != NULL) {
+      printf("%s %s\n", tokens[size], token);
       strcpy(tokens[size], token);
       size++;
       //tokens[++size] = token;
