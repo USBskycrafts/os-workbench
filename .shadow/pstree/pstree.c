@@ -150,7 +150,11 @@ char* print_tree(struct node* cur) {
         }
         strcat(tmp, space);
         free(space);
-        strcat(tmp, " | ");
+        if(j == size - 1) {
+          strcat(tmp, "   ");
+        } else {
+          strcat(tmp, " | ");
+        }
         strcat(tmp, tokens[j]);
         strcat(tmp, "\n");
         tree = realloc(tree, strlen(tree) + strlen(tmp) + 2);
