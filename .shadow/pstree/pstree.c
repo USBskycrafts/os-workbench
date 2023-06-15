@@ -135,6 +135,7 @@ char* print_tree(struct node* cur) {
         free(space);
         strcat(tmp, " |-");
         strcat(tmp, tokens[j]);
+        strcat(tmp, "\n");
         tree = realloc(tree, strlen(tree) + strlen(tmp) + 2);
         strcat(tree, tmp);
       } else {
