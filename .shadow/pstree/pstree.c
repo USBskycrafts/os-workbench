@@ -103,18 +103,17 @@ char* print_tree(struct node* cur) {
   tree[0] = '\0';
   for(int i = 0; i < cur->size; i++) {
     char *sub = print_tree(nodes[cur->children[i]]);
-    //strtok now does not work
-    char* token = strtok(sub, "\n");
     int size = 0;
     char* tokens[NODE_SIZE];
+    tokens[0] = sub;
+    char* token = strtok(sub, "\n");
     if(token != NULL) {
       tokens[0] = token;
       while(token != NULL) {
         token = strtok(NULL, "\n");
-        tokens[++size] = token;
+        strcpy(tokens[++size], token);
+        //tokens[++size] = token;
       }
-    } else {
-      tokens[0] = sub;
     }
     free(token);
     free(sub);
