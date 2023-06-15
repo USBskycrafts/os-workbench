@@ -105,16 +105,14 @@ char* print_tree(struct node* cur) {
     char *sub = print_tree(nodes[cur->children[i]]);
     int size = 0;
     char* tokens[NODE_SIZE];
+    tokens[0] = malloc(strlen(sub) + 1);
     tokens[0] = sub;
     char* token = strtok(sub, "\n");
-    if(token != NULL) {
-      tokens[0] = token;
-      while(token != NULL) {
-        token = strtok(NULL, "\n");
-        tokens[++size] = malloc(strlen(token) + 1);
-        strcpy(tokens[size], token);
-        //tokens[++size] = token;
-      }
+    while(token != NULL) {
+      tokens[size] = realloc(tokens[size], strlen(token) + 1);
+      size++;
+      strcpy(tokens[size], token);
+      //tokens[++size] = token;
     }
     free(token);
     free(sub);
