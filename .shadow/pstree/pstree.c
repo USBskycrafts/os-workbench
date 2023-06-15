@@ -113,7 +113,7 @@ char* print_tree(struct node* cur) {
       size++;
       strcpy(tokens[size], token);
       //tokens[++size] = token;
-      char* token = strtok(sub, "\n");
+      char* token = strtok(NULL, "\n");
     }
     free(token);
     free(sub);
