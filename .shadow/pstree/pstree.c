@@ -150,7 +150,7 @@ char* print_tree(struct node* cur) {
         tree = realloc(tree, strlen(tree) + strlen(tmp) + 2);
         strcat(tree, tmp);
       }
-      //free(tmp);
+      free(tmp);
     }
   }
   return tree;
