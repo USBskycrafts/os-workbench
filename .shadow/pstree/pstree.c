@@ -103,7 +103,7 @@ char* print_tree(struct node* cur) {
   tree[0] = '\0';
   for(int i = 0; i < cur->size; i++) {
     char *subtree = print_tree(nodes[cur->children[i]]);
-    char* sub;
+    char* sub = malloc(strlen(subtree) + 1);
     strcpy(sub, subtree);
     free(subtree);
     int size = 0;
