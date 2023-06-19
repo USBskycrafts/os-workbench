@@ -41,8 +41,22 @@ int snprintf(char *out, size_t n, const char *fmt, ...)
 int vsnprintf(char *out, size_t n, const char *fmt, va_list ap)
 {
   static int lock = 0;
+  enum
+  {
+    idle,
+    print
+  } flag;
+  flag = idle;
   while (atomic_xchg(&lock, 1))
     ;
+  const char *p = fmt;
+  for (; *p && n; p++)
+  {
+    if (*p == '%' && flag == idle)
+    {
+      flag = print;
+    }
+  }
   panic("Not implemented");
   lock = 0;
 }
