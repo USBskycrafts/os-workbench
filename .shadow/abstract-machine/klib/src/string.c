@@ -49,9 +49,14 @@ char *strcat(char *dst, const char *src)
 
 int strcmp(const char *s1, const char *s2)
 {
+  return strncmp(s1, s2, INT32_MAX);
+}
+
+int strncmp(const char *s1, const char *s2, size_t n)
+{
   const char *ptr_1 = s1;
   const char *ptr_2 = s2;
-  for (; *ptr_1 && *ptr_2; ptr_1++, ptr_2++)
+  for (; *ptr_1 && *ptr_2 && n--; ptr_1++, ptr_2++)
   {
     if (*ptr_1 != *ptr_2)
     {
@@ -61,14 +66,14 @@ int strcmp(const char *s1, const char *s2)
   return true;
 }
 
-int strncmp(const char *s1, const char *s2, size_t n)
-{
-  panic("Not implemented");
-}
-
 void *memset(void *s, int c, size_t n)
 {
-  panic("Not implemented");
+  char *ptr = s;
+  for (size_t i = 0; i < n; i++)
+  {
+    ptr[i] = c;
+  }
+  return s;
 }
 
 void *memmove(void *dst, const void *src, size_t n)
