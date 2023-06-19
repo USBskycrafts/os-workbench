@@ -110,7 +110,16 @@ void *memcpy(void *out, const void *in, size_t n)
 
 int memcmp(const void *s1, const void *s2, size_t n)
 {
-  panic("Not implemented");
+  const char *ptr_1 = s1;
+  const char *ptr_2 = s2;
+  while (n--)
+  {
+    if (*ptr_1 != *ptr_2)
+    {
+      return false;
+    }
+  }
+  return true;
 }
 
 #endif
