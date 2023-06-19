@@ -40,7 +40,11 @@ int snprintf(char *out, size_t n, const char *fmt, ...)
 
 int vsnprintf(char *out, size_t n, const char *fmt, va_list ap)
 {
+  static int lock = 0;
+  while (atomic_xchg(&lock, 1))
+    ;
   panic("Not implemented");
+  lock = 0;
 }
 
 #endif
