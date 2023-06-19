@@ -71,6 +71,7 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap)
           out[cnt] = *ptr;
           cnt++;
           ptr++;
+          n--;
         }
         break;
       }
@@ -84,6 +85,7 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap)
           out[cnt] = *ptr;
           cnt++;
           ptr++;
+          n--;
         }
         break;
       }
@@ -101,6 +103,7 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap)
       case 'c':
       {
         out[cnt++] = va_arg(ap, int);
+        n--;
         break;
       }
       case '%':
