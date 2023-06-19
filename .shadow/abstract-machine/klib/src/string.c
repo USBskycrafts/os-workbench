@@ -49,7 +49,16 @@ char *strcat(char *dst, const char *src)
 
 int strcmp(const char *s1, const char *s2)
 {
-  panic("Not implemented");
+  const char *ptr_1 = s1;
+  const char *ptr_2 = s2;
+  for (; *ptr_1 && *ptr_2; ptr_1++, ptr_2++)
+  {
+    if (*ptr_1 != *ptr_2)
+    {
+      return false;
+    }
+  }
+  return true;
 }
 
 int strncmp(const char *s1, const char *s2, size_t n)
