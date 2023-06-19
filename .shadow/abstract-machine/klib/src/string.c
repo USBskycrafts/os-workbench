@@ -18,7 +18,14 @@ size_t strlen(const char *s)
 
 char *strcpy(char *dst, const char *src)
 {
-  panic("Not implemented");
+  // dst and src does not lap
+  const char *ptr_s = src;
+  char *ptr_d = dst;
+  for (; *ptr_s; ptr_d++, ptr_s++)
+  {
+    *ptr_d = *ptr_s;
+  }
+  return dst;
 }
 
 char *strncpy(char *dst, const char *src, size_t n)
