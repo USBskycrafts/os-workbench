@@ -35,7 +35,7 @@ char *strncpy(char *dst, const char *src, size_t n)
 char *strcat(char *dst, const char *src)
 {
   size_t n = strlen(dst);
-  char *ptr_d = dst + n;
+  char *ptr_d = &dst[n];
   const char *ptr_s = src;
   while (*ptr_s)
   {
