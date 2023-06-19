@@ -40,15 +40,13 @@ int snprintf(char *out, size_t n, const char *fmt, ...)
 
 int vsnprintf(char *out, size_t n, const char *fmt, va_list ap)
 {
-  static int lock = 0;
   enum
   {
     idle,
     print
   } flag;
   flag = idle;
-  while (atomic_xchg(&lock, 1))
-    ;
+  int cnt = 0;
   const char *p = fmt;
   for (; *p && n; p++)
   {
@@ -56,9 +54,44 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap)
     {
       flag = print;
     }
+    if (flag == print)
+    {
+      switch (*p)
+      {
+      case 'd':
+      case 'i':
+      {
+        char num[33];
+        itoa(num, va_arg(ap, int));
+        char *ptr = num;
+        while (*ptr)
+        {
+          out[cnt] = *ptr;
+          cnt++;
+          ptr++;
+        }
+        break;
+      }
+      case 's':
+      {
+        char *s = va_arg(ap, char *);
+        while (*s)
+        {
+          out[cnt] = *s;
+          cnt++;
+          n--;
+        }
+        break;
+      }
+      default:
+        goto error;
+        break;
+      }
+    }
   }
-  panic("Not implemented");
-  lock = 0;
+  return cnt;
+error:
+  return -1;
 }
 
 #endif
