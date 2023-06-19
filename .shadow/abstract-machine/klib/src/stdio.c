@@ -43,7 +43,7 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap)
   enum
   {
     idle,
-    print
+    specifier
   } flag;
   flag = idle;
   int cnt = 0;
@@ -52,10 +52,12 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap)
   {
     if (*p == '%' && flag == idle)
     {
-      flag = print;
+      flag = specifier;
+      continue;
     }
-    if (flag == print)
+    if (flag == specifier)
     {
+      flag = idle;
       switch (*p)
       {
       case 'd':
@@ -94,6 +96,16 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap)
           cnt++;
           n--;
         }
+        break;
+      }
+      case 'c':
+      {
+        out[cnt++] = va_arg(ap, int);
+        break;
+      }
+      case '%':
+      {
+        out[cnt++] = '%';
         break;
       }
       default:
