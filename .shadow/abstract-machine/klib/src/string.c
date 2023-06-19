@@ -18,24 +18,33 @@ size_t strlen(const char *s)
 
 char *strcpy(char *dst, const char *src)
 {
-  // dst and src does not lap
+  return strncpy(dst, src, INT32_MAX);
+}
+
+char *strncpy(char *dst, const char *src, size_t n)
+{
   const char *ptr_s = src;
   char *ptr_d = dst;
-  for (; *ptr_s; ptr_d++, ptr_s++)
+  for (; *ptr_s && n--; ptr_d++, ptr_s++)
   {
     *ptr_d = *ptr_s;
   }
   return dst;
 }
 
-char *strncpy(char *dst, const char *src, size_t n)
-{
-  panic("Not implemented");
-}
-
 char *strcat(char *dst, const char *src)
 {
-  panic("Not implemented");
+  size_t n = strlen(dst);
+  char *ptr_d = dst + n;
+  const char *ptr_s = src;
+  while (*ptr_s)
+  {
+    *ptr_d = *ptr_s;
+    ptr_d++;
+    ptr_s++;
+  }
+  *ptr_d = '\0';
+  return dst;
 }
 
 int strcmp(const char *s1, const char *s2)
