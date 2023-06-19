@@ -66,6 +66,7 @@ void utoa(char *ptr, unsigned long long val)
     ptr[cnt - 1 - i] = tmp;
     ptr[i] = ptr[cnt - 1 - i];
   }
+  ptr[cnt] = '\0';
 }
 
 void *malloc(size_t size)
