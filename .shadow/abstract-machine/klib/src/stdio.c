@@ -61,8 +61,21 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap)
       case 'd':
       case 'i':
       {
-        char num[33];
+        char num[34];
         itoa(num, va_arg(ap, int));
+        char *ptr = num;
+        while (*ptr)
+        {
+          out[cnt] = *ptr;
+          cnt++;
+          ptr++;
+        }
+        break;
+      }
+      case 'u':
+      {
+        char num[33];
+        utoa(num, va_arg(ap, unsigned));
         char *ptr = num;
         while (*ptr)
         {
