@@ -12,6 +12,7 @@ int printf(const char *fmt, ...)
   va_start(ap, fmt);
   int ret = vsnprintf(buf, 4095, fmt, ap);
   va_end(ap);
+  putstr(buf);
   return ret;
 }
 
@@ -117,8 +118,10 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap)
       }
     }
   }
-error:
+  out[cnt] = '\0';
   return cnt;
+error:
+  return -1;
 }
 
 #endif
