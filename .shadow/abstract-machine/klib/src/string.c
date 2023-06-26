@@ -38,7 +38,7 @@ char *strcat(char *dst, const char *src) {
 }
 
 int strcmp(const char *s1, const char *s2) {
-  panic("Not implemented");
+  return strncmp(s1, s2, INT32_MAX);
 }
 
 int strncmp(const char *s1, const char *s2, size_t n) {
