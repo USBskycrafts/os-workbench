@@ -52,9 +52,9 @@ void splash() {
   }
 }
 
-void test() {
+void unittest() {
   const char* s = "Hello World\n";
-  assert(strlen(s) == 13);
+  printf("%s", s);
 }
 
 
@@ -67,13 +67,14 @@ int main(const char *args) {
   puts("\"\n");
 
   splash();
+  
+  #ifdef DEBUG
+  unittest();
+  #endif
 
   puts("Press any key to see its key code...\n");
-  #ifdef DEBUG
-  test();
-  #endif
-  // while (1) {
-  //   print_key();
-  // }
+  while (1) {
+    print_key();
+  }
   return 0;
 }
