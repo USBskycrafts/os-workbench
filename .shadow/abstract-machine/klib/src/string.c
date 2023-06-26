@@ -54,7 +54,11 @@ int strncmp(const char *s1, const char *s2, size_t n) {
 }
 
 void *memset(void *s, int c, size_t n) {
-  panic("Not implemented");
+  char* ptr = s;
+  for(size_t i = 0; i < n; i++) {
+    ptr[i] = c & 0xff;
+  }
+  return s;
 }
 
 void *memmove(void *dst, const void *src, size_t n) {
