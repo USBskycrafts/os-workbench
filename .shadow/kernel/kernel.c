@@ -61,6 +61,8 @@ int main(const char *args) {
   puts("\"\n");
 
   splash();
+  char *s = "Hello World\n";
+  assert(strlen(s) == 13);
 
   puts("Press any key to see its key code...\n");
   while (1) {
