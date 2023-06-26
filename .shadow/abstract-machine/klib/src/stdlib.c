@@ -29,6 +29,22 @@ int atoi(const char* nptr) {
   return x;
 }
 
+char* itoa(char* out, int num, int base) {
+  char buf[36];
+  if(base > 16) {
+    panic("itoa only support base that is not larger than 16");
+  }
+  size_t n = 0;
+  do {
+    buf[n++] = "0123456789abcdef"[num % base];
+  }while(num /= base);
+  for(size_t i = n - 1, j = 0; i >= 0; i--, j++) {
+    out[j] = buf[i];
+  }
+  out[n] = '\0';
+  return out;
+}
+
 void *malloc(size_t size) {
   // On native, malloc() will be called during initializaion of C runtime.
   // Therefore do not call panic() here, else it will yield a dead recursion:
