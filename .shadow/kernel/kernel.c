@@ -52,6 +52,11 @@ void splash() {
   }
 }
 
+void test() {
+
+}
+
+
 // Operating system is a C program!
 int main(const char *args) {
   ioe_init();
@@ -61,12 +66,13 @@ int main(const char *args) {
   puts("\"\n");
 
   splash();
-  char *s = "Hello World\n";
-  assert(strlen(s) == 12);
 
   puts("Press any key to see its key code...\n");
-  while (1) {
-    print_key();
-  }
+  #ifdef DEBUG
+  test();
+  #endif
+  // while (1) {
+  //   print_key();
+  // }
   return 0;
 }
