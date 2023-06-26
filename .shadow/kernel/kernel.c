@@ -62,7 +62,7 @@ int main(const char *args) {
 
   splash();
   char *s = "Hello World\n";
-  assert(strlen(s) == 13);
+  assert(strlen(s) == 12);
 
   puts("Press any key to see its key code...\n");
   while (1) {
