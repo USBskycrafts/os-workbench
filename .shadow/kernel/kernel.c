@@ -54,7 +54,7 @@ void splash() {
 
 void test() {
   const char* s = "Hello World\n";
-  assert(strlen(s) == 12);
+  assert(strlen(s) == 13);
 }
 
 
