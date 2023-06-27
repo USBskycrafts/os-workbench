@@ -69,9 +69,9 @@ int main(const char *args) {
 
   splash();
   
-  #ifdef DEBUG
-  unittest();
-  #endif
+  // #ifdef DEBUG
+  // unittest();
+  // #endif
 
   puts("Press any key to see its key code...\n");
   while (1) {
