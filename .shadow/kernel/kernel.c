@@ -55,7 +55,7 @@ void splash() {
 void unittest() {
   const char* s = "Hello World\n";
   puts(s);
-  printf("%s\n", s);
+  test(printf("%s\n", s));
 }
 
 
@@ -66,7 +66,7 @@ int main(const char *args) {
   puts("mainargs = \"");
   puts(args);  // make run mainargs=xxx
   puts("\"\n");
-  
+
   #ifdef DEBUG
   unittest();
   #endif
