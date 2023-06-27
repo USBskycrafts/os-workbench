@@ -52,12 +52,14 @@ void splash() {
   }
 }
 
-void unittest() {
+void __attribute__((noreturn)) unittest() {
   const char* s = "Hello World\n";
   test(puts(s));
   char a[24];
   strcpy(a, s);
   test(puts(a));
+
+  halt(0);
 }
 
 
@@ -71,7 +73,6 @@ int main(const char *args) {
 
   #ifdef DEBUG
   unittest();
-  halt(0);
   #endif
 
   splash();
