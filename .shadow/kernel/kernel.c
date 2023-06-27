@@ -66,12 +66,12 @@ int main(const char *args) {
   puts("mainargs = \"");
   puts(args);  // make run mainargs=xxx
   puts("\"\n");
+  
+  #ifdef DEBUG
+  unittest();
+  #endif
 
   splash();
-  
-  // #ifdef DEBUG
-  // unittest();
-  // #endif
 
   puts("Press any key to see its key code...\n");
   while (1) {
