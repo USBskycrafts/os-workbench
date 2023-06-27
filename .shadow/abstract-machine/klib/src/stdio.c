@@ -8,7 +8,7 @@
 
 int printf(const char *fmt, ...) {
   char buf[4100];
-  static int spinlock;
+  static int spinlock = 0;
   va_list ap;
   va_start(ap, fmt);
   int ret = vsnprintf(buf, 4096, fmt, ap);
