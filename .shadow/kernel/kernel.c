@@ -55,7 +55,7 @@ void splash() {
 void unittest() {
   const char* s = "Hello World\n";
   puts(s);
-  //test(printf("%s\n", s));
+  test(printf("%s\n", s));
 }
 
 
