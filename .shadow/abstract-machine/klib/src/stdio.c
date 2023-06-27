@@ -14,7 +14,6 @@ int printf(const char *fmt, ...) {
   int ret = vsnprintf(buf, 4096, fmt, ap);
   va_end(ap);
   while(atomic_xchg(&spinlock, 1));
-  putstr("in printf\n");
   putstr(buf);
   spinlock = 0;
   return ret;
