@@ -54,7 +54,7 @@ void splash() {
 
 void unittest() {
   const char* s = "Hello World\n";
-  printf("%s", s);
+  puts(s);
 }
 
 
@@ -73,8 +73,8 @@ int main(const char *args) {
   #endif
 
   puts("Press any key to see its key code...\n");
-  while (1) {
-    print_key();
-  }
+  // while (1) {
+  //   print_key();
+  // }
   return 0;
 }
