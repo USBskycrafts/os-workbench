@@ -71,6 +71,7 @@ int main(const char *args) {
 
   #ifdef DEBUG
   unittest();
+  halt(1);
   #endif
 
   splash();
