@@ -16,7 +16,7 @@
   ({ for (const char *p = s; *p; p++) putch(*p); })
 
 #define test(function) \
-  ({char buf[35]; putstr(itoa(buf, __LINE__, 10)); putstr(": "); function;})
+  ({putstr(__FUNCTION__); putstr(": "); function;})
 
 #define io_read(reg) \
   ({ reg##_T __io_param; \
