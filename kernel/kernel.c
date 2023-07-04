@@ -52,6 +52,15 @@ void splash() {
   }
 }
 
+void  unittest() {
+  const char* s = "Hello World\n";
+  assert(strcmp(s, "Hello") > 0);
+  assert(strncmp(s, "Hello", 3) == 0);
+  assert(strncmp(s, "Hello", 8) > 0);
+  halt(0);
+}
+
+
 // Operating system is a C program!
 int main(const char *args) {
   ioe_init();
@@ -59,6 +68,10 @@ int main(const char *args) {
   puts("mainargs = \"");
   puts(args);  // make run mainargs=xxx
   puts("\"\n");
+
+  #ifdef DEBUG
+  unittest();
+  #endif
 
   splash();
 
