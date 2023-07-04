@@ -3,9 +3,11 @@
 #include <klib.h>
 #include <klib-macros.h>
 
-#define SIDE 16
 
 static int w, h;  // Screen size
+static int p_w, p_h;  // Picture size
+
+unsigned char picture[] = {};
 
 #define KEYNAME(key) \
   [AM_KEY_##key] = #key,
@@ -30,15 +32,21 @@ void print_key() {
   }
 }
 
-static void draw_tile(int x, int y, int w, int h, uint32_t color) {
-  uint32_t pixels[w * h]; // WARNING: large stack-allocated memory
+void scale(uint32_t* pixels) {
+  // pixels is a w * h array that matches screen
+  for(int i = 0; i < h; i++) {
+    for(int j = 0; j < w; j++) {
+      assert((h / p_h) * i * p_w + (w / p_w) * j < p_h * p_w);
+      pixels[i * w + j] = picture[(p_h / h) * i * p_w + (p_w / w) * j];
+    }
+  }
+}
+
+static void draw_picture(uint32_t* pixels, int w, int h) {
   AM_GPU_FBDRAW_T event = {
-    .x = x, .y = y, .w = w, .h = h, .sync = 1,
+    .x = 0, .y = 0, .w = w, .h = h, .sync = 1,
     .pixels = pixels,
   };
-  for (int i = 0; i < w * h; i++) {
-    pixels[i] = color;
-  }
   ioe_write(AM_GPU_FBDRAW, &event);
 }
 
@@ -48,13 +56,9 @@ void splash() {
   w = info.width;
   h = info.height;
 
-  for (int x = 0; x * SIDE <= w; x ++) {
-    for (int y = 0; y * SIDE <= h; y++) {
-      if ((x & 1) ^ (y & 1)) {
-        draw_tile(x * SIDE, y * SIDE, SIDE, SIDE, 0xffffff); // white
-      }
-    }
-  }
+  uint32_t pixels[w * h];
+  scale(pixels);
+  draw_picture(pixels, w, h);
 }
 
 void  unittest() {
