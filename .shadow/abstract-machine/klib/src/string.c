@@ -1,3 +1,11 @@
+/**
+ * @file string.c
+ * @author Junran Yang
+ * @copyright 2023 Copyright of Junran Yang
+ * @brief strlen, strcpy strncpy strcat tested
+ * @todo test other function
+ */
+
 #include <klib.h>
 #include <klib-macros.h>
 #include <stdint.h>

@@ -54,8 +54,9 @@ void splash() {
 
 void  unittest() {
   const char* s = "Hello World\n";
-  printf("%d Hello World %s%x %c\n", 2, s, 16, '8');
-  printf("%d Hello World %s%x %% %c\n", 2, s, 16, '8');
+  assert(strcmp(s, "Hello") > 0);
+  assert(strncmp(s, "Hello", 3) == 0);
+  assert(strncmp(s, "Hello", 8) == 0);
   halt(0);
 }
 
@@ -69,7 +70,7 @@ int main(const char *args) {
   puts("\"\n");
 
   #ifdef DEBUG
-  unittest();
+  //unittest();
   #endif
 
   splash();

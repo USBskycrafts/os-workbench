@@ -1,3 +1,11 @@
+/**
+ * @file stdio.c
+ * @brief printf tested, 
+ * @todo testing other function
+ * @author Junran Yang
+ * @copyright 2023 Copyright Junran Yang
+ */
+
 #include <am.h>
 #include <klib.h>
 #include <klib-macros.h>
