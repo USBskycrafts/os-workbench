@@ -72,7 +72,7 @@ int main(const char *args) {
   puts("\"\n");
 
   #ifdef DEBUG
-  //unittest();
+  unittest();
   #endif
 
   splash();
