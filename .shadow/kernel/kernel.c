@@ -56,7 +56,7 @@ void  unittest() {
   const char* s = "Hello World\n";
   assert(strcmp(s, "Hello") > 0);
   assert(strncmp(s, "Hello", 3) == 0);
-  assert(strncmp(s, "Hello", 8) == 0);
+  assert(strncmp(s, "Hello", 8) > 0);
   halt(0);
 }
 
