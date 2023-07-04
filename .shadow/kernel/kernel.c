@@ -52,7 +52,7 @@ void splash() {
   }
 }
 
-void __attribute__((noreturn)) unittest() {
+void  unittest() {
   const char* s = "Hello World\n";
   test(puts(s));
   char a[24];
