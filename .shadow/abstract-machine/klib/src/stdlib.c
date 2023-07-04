@@ -2,6 +2,8 @@
 #include <klib.h>
 #include <klib-macros.h>
 
+
+
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 static unsigned long int next = 1;
 
