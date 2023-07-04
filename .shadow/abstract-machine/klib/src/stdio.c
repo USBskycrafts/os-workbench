@@ -72,10 +72,11 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
           cnt += strlen(s);
           break;
         }
-        case 'c':
-          char c = va_arg(ap, uint32_t);
-          out[cnt++] = c;
+        case 'c': {
+          char ch = va_arg(ap, uint32_t);
+          out[cnt++] = ch;
           break;
+        }
         default:
           panic("modifier can only be d, x, s, c");
       }
