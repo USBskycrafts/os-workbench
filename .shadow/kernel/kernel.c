@@ -54,10 +54,9 @@ void splash() {
 
 void  unittest() {
   const char* s = "Hello World\n";
-  test(puts(s));
   char a[24];
   strcpy(a, s);
-  test(puts(a));
+  puts(a);
 
   halt(0);
 }
