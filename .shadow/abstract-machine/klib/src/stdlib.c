@@ -38,7 +38,7 @@ char* itoa(char* out, int num, int base) {
   do {
     buf[n++] = "0123456789abcdef"[num % base];
   }while(num /= base);
-  for(size_t i = n - 1, j = 0; i >= 0; i--, j++) {
+  for(int i = n - 1, j = 0; i >= 0; i--, j++) {
     out[j] = buf[i];
   }
   out[n] = '\0';
