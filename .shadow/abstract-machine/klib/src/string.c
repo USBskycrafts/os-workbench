@@ -2,7 +2,7 @@
  * @file string.c
  * @author Junran Yang
  * @copyright 2023 Copyright of Junran Yang
- * @brief strlen, strcpy strncpy strcat tested
+ * @brief strlen, strcpy strncpy strcat strcmp strncmp tested
  * @todo test other function
  */
 
