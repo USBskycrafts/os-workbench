@@ -1,4 +1,4 @@
 NAME = klib
--CFLAGS += -ggdb
+CFLAGS += -ggdb
 SRCS = $(shell find src/ -name "*.c")
 include $(AM_HOME)/Makefile
