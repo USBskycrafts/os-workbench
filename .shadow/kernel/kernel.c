@@ -54,7 +54,8 @@ void splash() {
 
 void  unittest() {
   const char* s = "Hello World\n";
-  printf("%d Hello World %s\n", 2, s);
+  printf("%d Hello World %s%x %c\n", 2, s, 16, '8');
+  printf("%d Hello World %s%x %% %c\n", 2, s, 16, '8');
   halt(0);
 }
 
