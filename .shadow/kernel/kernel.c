@@ -82,7 +82,7 @@ int main(const char *args) {
   //unittest();
   #endif
 
- // splash();
+  splash();
 
   puts("Press any key to see its key code...\n");
   while (1) {
