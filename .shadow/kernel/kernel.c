@@ -39,6 +39,7 @@ void scale(uint32_t* pixels) {
       int index = (p_h / h) * i * p_w + (p_w / w) * j;
       assert(index < p_h * p_w);
       pixels[i * w + j] = picture[index];
+      
     }
   }
 }
