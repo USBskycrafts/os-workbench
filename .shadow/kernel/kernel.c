@@ -5,9 +5,9 @@
 
 
 static int w, h;  // Screen size
-static int p_w, p_h;  // Picture size
+static int p_w = 2, p_h = 2;  // Picture size
 
-unsigned char picture[] = {};
+unsigned char picture[] = {1, 2, 3, 4};
 
 #define KEYNAME(key) \
   [AM_KEY_##key] = #key,
