@@ -36,8 +36,9 @@ void scale(uint32_t* pixels) {
   // pixels is a w * h array that matches screen
   for(int i = 0; i < h; i++) {
     for(int j = 0; j < w; j++) {
-      assert((p_h / h) * i * p_w + (p_w / w) * j < p_h * p_w);
-      pixels[i * w + j] = picture[(p_h / h) * i * p_w + (p_w / w) * j];
+      int index = (p_h / h) * i * p_w + (p_w / w) * j;
+      assert(index < p_h * p_w);
+      pixels[i * w + j] = picture[index];
     }
   }
 }
