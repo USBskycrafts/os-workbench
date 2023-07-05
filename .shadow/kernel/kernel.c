@@ -37,7 +37,7 @@ void scale(uint32_t* pixels) {
   for(int i = 0; i < h; i++) {
     for(int j = 0; j < w; j++) {
       assert((h / p_h) * i * p_w + (w / p_w) * j < p_h * p_w);
-      pixels[i * w + j] = picture[(p_h / h) * i * p_w + (p_w / w) * j];
+      pixels[i * w + j] = picture[(h / p_h) * i * p_w + (w / p_w) * j];
     }
   }
 }
