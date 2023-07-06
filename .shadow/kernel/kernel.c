@@ -4,10 +4,12 @@
 #include <klib-macros.h>
 
 #define SIDE 16
+#define picW 1920
+#define picH 1080 // Picture size
 
 static int w, h;  // Screen size
-static int picW = 2, picH = 2; // Picture size
-static int picture[] = {1, 2, 3, 4};
+
+static uint32_t picture[picW * picW] = {1, 2, 3, 4};
 
 #define KEYNAME(key) \
   [AM_KEY_##key] = #key,
