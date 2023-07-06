@@ -7,7 +7,7 @@
 static int w, h;  // Screen size
 static int p_w = 800, p_h = 600;  // Picture size
 
-static uint32_t picture[800 * 600] = {1, 2, 3, 4};
+static uint32_t picture[800 * 600];
 
 #define KEYNAME(key) \
   [AM_KEY_##key] = #key,
