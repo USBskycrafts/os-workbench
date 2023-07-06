@@ -7,7 +7,7 @@
 static int w, h;  // Screen size
 static int p_w = 2, p_h = 2;  // Picture size
 
-static uint32_t picture[4] = {3, 5, 6, 9};
+static uint32_t picture[640 * 480] = {3, 5, 6, 9};
 
 #define KEYNAME(key) \
   [AM_KEY_##key] = #key,
@@ -37,7 +37,6 @@ void scale(uint32_t* pixels) {
   for(int i = 0; i < h; i++) {
     for(int j = 0; j < w; j++) {
       int index = (p_h / h) * i * p_w + (p_w / w) * j;
-      assert(index < p_h * p_w);
       pixels[i * w + j] = picture[index];
     }
   }
