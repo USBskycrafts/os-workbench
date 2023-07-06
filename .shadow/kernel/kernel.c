@@ -35,7 +35,7 @@ void print_key() {
 }
 
 static void draw_tile(uint32_t *buf, int x, int y, int tileW, int tileH) {
-  uint32_t pixels[w * h]; // WARNING: large stack-allocated memory
+  uint32_t pixels[tileW * tileW]; // WARNING: large stack-allocated memory
   AM_GPU_FBDRAW_T event = {
     .x = x, .y = y, .w = tileW, .h = tileH, .sync = 1,
     .pixels = pixels,
