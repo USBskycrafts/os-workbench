@@ -41,6 +41,7 @@ static void draw_tile(int x, int y, int w, int h) {
   
   for(int i = 0; i < h; i++) {
     for(int j = 0; j < w; j++) {
+      assert((y + h) * pw * (ph / h) * i + (x + w) * j * (pw / w) < pw * ph);
       pixels[i * w + j] = picture[(y + h) * pw * (ph / h) * i + (x + w) * j * (pw / w)];
     }
   }
