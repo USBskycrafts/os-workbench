@@ -44,9 +44,13 @@ void scale(uint32_t* pixels) {
 }
 
 static void draw_picture(uint32_t* pixels, int w, int h) {
+  uint32_t buffer[w * h];
+  for(int i = 0; i < w * h; i++) {
+    buffer[i] = pixels[i];
+  }
   AM_GPU_FBDRAW_T event = {
     .x = 0, .y = 0, .w = w, .h = h, .sync = 1,
-    .pixels = pixels,
+    .pixels = buffer,
   };
   ioe_write(AM_GPU_FBDRAW, &event);
 }
