@@ -69,7 +69,7 @@ void splash() {
   scale(buf);
   for (int x = 0; x * SIDE < w; x ++) {
     for (int y = 0; y * SIDE < h; y++) {
-      draw_tile(buf, x * SIDE, y * SIDE, SIDE, SIDE); // white
+      draw_tile(buf, x * SIDE, y * SIDE, SIDE, SIDE);
     }
   }
 }
