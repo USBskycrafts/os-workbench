@@ -6,6 +6,8 @@
 #define SIDE 16
 
 static int w, h;  // Screen size
+static int picW = 2, picH = 2; // Picture size
+static int picture[] = {1, 2, 3, 4};
 
 #define KEYNAME(key) \
   [AM_KEY_##key] = #key,
@@ -30,16 +32,27 @@ void print_key() {
   }
 }
 
-static void draw_tile(int x, int y, int w, int h, uint32_t color) {
+static void draw_tile(uint32_t *buf, int x, int y, int tileW, int tileH) {
   uint32_t pixels[w * h]; // WARNING: large stack-allocated memory
   AM_GPU_FBDRAW_T event = {
-    .x = x, .y = y, .w = w, .h = h, .sync = 1,
+    .x = x, .y = y, .w = tileW, .h = tileH, .sync = 1,
     .pixels = pixels,
   };
-  for (int i = 0; i < w * h; i++) {
-    pixels[i] = color;
+  for(int i = 0; i < tileH; i++) {
+    for(int j = 0; j < tileW; j++) {
+      pixels[i * tileW + j] = buf[(y + i) * w + (x + j)];
+    }
   }
   ioe_write(AM_GPU_FBDRAW, &event);
+}
+
+static void scale(uint32_t *buf) {
+  // size of buf is h * w
+  for(int i = 0; i < h; i++) {
+    for(int j = 0; j < w; j++) {
+      buf[i * w + j] = picture[(picH / h) * i * picW + (picW / w) * j];
+    }
+  }
 }
 
 void splash() {
@@ -48,10 +61,12 @@ void splash() {
   w = info.width;
   h = info.height;
 
+  uint32_t buf[w * h];
+  scale(buf);
   for (int x = 0; x * SIDE < w; x ++) {
     for (int y = 0; y * SIDE < h; y++) {
       if ((x & 1) ^ (y & 1)) {
-        draw_tile(x * SIDE, y * SIDE, SIDE, SIDE, 0xffffff); // white
+        draw_tile(buf, x * SIDE, y * SIDE, SIDE, SIDE); // white
       }
     }
   }
