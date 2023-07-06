@@ -5,7 +5,7 @@
 
 
 static int w, h;  // Screen size
-static int p_w = 1080, p_h = 1920;  // Picture size
+static int p_w = 1920, p_h = 1080;  // Picture size
 
 static uint32_t picture[1920 * 1080] = {1, 2, 3, 4};
 
