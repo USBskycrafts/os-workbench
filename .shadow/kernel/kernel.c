@@ -42,6 +42,7 @@ static void draw_tile(uint32_t *buf, int x, int y, int tileW, int tileH) {
   };
   for(int i = 0; i < tileH; i++) {
     for(int j = 0; j < tileW; j++) {
+      assert((y + i) * w + (x + j) < w * h);
       pixels[i * tileW + j] = buf[(y + i) * w + (x + j)];
     }
   }
@@ -52,6 +53,7 @@ static void scale(uint32_t *buf) {
   // size of buf is h * w
   for(int i = 0; i < h; i++) {
     for(int j = 0; j < w; j++) {
+      assert((picH / h) * i * picW + (picW / w) * j < picH * picW);
       buf[i * w + j] = picture[(picH / h) * i * picW + (picW / w) * j];
     }
   }
