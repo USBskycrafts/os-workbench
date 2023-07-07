@@ -43,7 +43,7 @@ static void draw_tile(uint32_t *buf, int x, int y, int tileW, int tileH) {
   for(int i = 0; i < tileH; i++) {
     for(int j = 0; j < tileW; j++) {
       assert((y + i) * w + (x + j) < w * h);
-      pixels[i * tileW + j] = buf[(y + i) * w + (x + j)] | 0xffffff;
+      pixels[i * tileW + j] = 0xffffff;
     }
   }
   ioe_write(AM_GPU_FBDRAW, &event);
