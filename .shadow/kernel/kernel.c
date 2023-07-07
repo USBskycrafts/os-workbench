@@ -49,6 +49,7 @@ static void draw_tile(int x, int y, int tileW, int tileH) {
     for(int j = 0; j < tileW; j++) {
       int picX, picY;
       get_point(&picX, &picY, x + j, y + i);
+      assert(picX + picY * w < picH * picW);
       pixels[i * tileW + j] = picture[picX + picY * w];
     }
   }
