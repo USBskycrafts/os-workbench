@@ -91,6 +91,7 @@ int main(const char *args) {
   puts(args);  // make run mainargs=xxx
   puts("\"\n");
 
+  assert(1 > 2);
   #ifdef DEBUG
   //unittest();
   #endif
