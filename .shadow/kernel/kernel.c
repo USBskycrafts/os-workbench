@@ -4,8 +4,8 @@
 #include <klib-macros.h>
 
 #define SIDE 16
-#define picW 1024
-#define picH 720 // Picture size
+#define picW 640
+#define picH 480 // Picture size
 
 static int w, h;  // Screen size
 
