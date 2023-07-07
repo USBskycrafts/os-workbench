@@ -9,7 +9,7 @@
 
 static int w, h;  // Screen size
 
-static uint32_t picture[picW * picW] = {1, 2, 3, 4};
+//static uint32_t picture[picW * picW] = {1, 2, 3, 4};
 
 #define KEYNAME(key) \
   [AM_KEY_##key] = #key,
@@ -43,21 +43,21 @@ static void draw_tile(uint32_t *buf, int x, int y, int tileW, int tileH) {
   for(int i = 0; i < tileH; i++) {
     for(int j = 0; j < tileW; j++) {
       assert((y + i) * w + (x + j) < w * h);
-      pixels[i * tileW + j] = buf[(y + i) * w + (x + j)];
+      pixels[i * tileW + j] = 0xffffff;
     }
   }
   ioe_write(AM_GPU_FBDRAW, &event);
 }
 
-static void scale(uint32_t *buf) {
-  // size of buf is h * w
-  for(int i = 0; i < h; i++) {
-    for(int j = 0; j < w; j++) {
-      assert((picH / h) * i * picW + (picW / w) * j < picH * picW);
-      buf[i * w + j] = picture[(picH / h) * i * picW + (picW / w) * j];
-    }
-  }
-}
+// static void scale(uint32_t *buf) {
+//   // size of buf is h * w
+//   for(int i = 0; i < h; i++) {
+//     for(int j = 0; j < w; j++) {
+//       assert((picH / h) * i * picW + (picW / w) * j < picH * picW);
+//       buf[i * w + j] = picture[(picH / h) * i * picW + (picW / w) * j];
+//     }
+//   }
+// }
 
 void splash() {
   AM_GPU_CONFIG_T info = {0};
@@ -66,7 +66,7 @@ void splash() {
   h = info.height;
 
   uint32_t buf[w * h];
-  scale(buf);
+  //scale(buf);
   for (int x = 0; x * SIDE < w; x ++) {
     for (int y = 0; y * SIDE < h; y++) {
       draw_tile(buf, x * SIDE, y * SIDE, SIDE, SIDE);
