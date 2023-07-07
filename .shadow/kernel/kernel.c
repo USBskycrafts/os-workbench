@@ -34,7 +34,12 @@ void print_key() {
   }
 }
 
-static void draw_tile(uint32_t *buf, int x, int y, int tileW, int tileH) {
+static void get_point(int *picX, int *picY, int pixelX, int pixelY) {
+  *picX = picW / w * pixelX;
+  *picY = picH / h * pixelY;
+}
+
+static void draw_tile(int x, int y, int tileW, int tileH) {
   uint32_t pixels[tileW * tileW]; // WARNING: large stack-allocated memory
   AM_GPU_FBDRAW_T event = {
     .x = x, .y = y, .w = tileW, .h = tileH, .sync = 1,
@@ -42,21 +47,12 @@ static void draw_tile(uint32_t *buf, int x, int y, int tileW, int tileH) {
   };
   for(int i = 0; i < tileH; i++) {
     for(int j = 0; j < tileW; j++) {
-      assert((y + i) * w + (x + j) < w * h);
-      pixels[i * tileW + j] = 0xffffff;
+      int picX, picY;
+      get_point(&picX, &picY, x + j, y + i);
+      pixels[i * tileW + j] = picture[picX + picY * w];
     }
   }
   ioe_write(AM_GPU_FBDRAW, &event);
-}
-
-static void scale(uint32_t *buf) {
-  //size of buf is h * w
-  for(int i = 0; i < h; i++) {
-    for(int j = 0; j < w; j++) {
-      assert((picH / h) * i * picW + (picW / w) * j < picH * picW);
-      buf[i * w + j] = picture[(picH / h) * i * picW + (picW / w) * j];
-    }
-  }
 }
 
 void splash() {
@@ -65,11 +61,9 @@ void splash() {
   w = info.width;
   h = info.height;
 
-  uint32_t buf[w * h];
-  scale(buf);
   for (int x = 0; x * SIDE < w; x ++) {
     for (int y = 0; y * SIDE < h; y++) {
-      draw_tile(buf, x * SIDE, y * SIDE, SIDE, SIDE);
+      draw_tile(x * SIDE, y * SIDE, SIDE, SIDE);
     }
   }
 }
