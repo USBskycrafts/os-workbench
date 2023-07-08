@@ -74,6 +74,14 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
           cnt += strlen(buf);
           break;
         }
+        case 'p': {
+          intptr_t p = va_arg(ap, intptr_t);
+          char buf[36];
+          itoa(buf, p, 16);
+          strcpy(&out[cnt], buf);
+          cnt += strlen(buf);
+          break;
+        }
         case 's': {
           const char* s = va_arg(ap, char*);
           strcpy(&out[cnt], s);
