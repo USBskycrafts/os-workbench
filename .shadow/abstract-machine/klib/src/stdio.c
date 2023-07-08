@@ -70,7 +70,8 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
           int d = va_arg(ap, int);
           char buf[36];
           itoa(buf, d, 16);
-          strcpy(&out[cnt], buf);
+          strcpy(&out[cnt], "0x");
+          strcat(&out[cnt], buf);
           cnt += strlen(buf);
           break;
         }
@@ -78,7 +79,8 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
           intptr_t p = va_arg(ap, intptr_t);
           char buf[36];
           itoa(buf, p, 16);
-          strcpy(&out[cnt], buf);
+          strcpy(&out[cnt], "0x");
+          strcat(&out[cnt], buf);
           cnt += strlen(buf);
           break;
         }
