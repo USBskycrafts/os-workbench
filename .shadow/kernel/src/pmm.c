@@ -1,10 +1,11 @@
 #include <common.h>
 
 static void *kalloc(size_t size) {
-  return NULL;
+  return malloc(size);
 }
 
 static void kfree(void *ptr) {
+  free(ptr);
 }
 
 static void pmm_init() {
