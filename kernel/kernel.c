@@ -2,10 +2,12 @@
 #include <amdev.h>
 #include <klib.h>
 #include <klib-macros.h>
+#include "picture.h"
 
 #define SIDE 16
 
 static int w, h;  // Screen size
+
 
 #define KEYNAME(key) \
   [AM_KEY_##key] = #key,
@@ -18,6 +20,11 @@ static inline void puts(const char *s) {
 void print_key() {
   AM_INPUT_KEYBRD_T event = { .keycode = AM_KEY_NONE };
   ioe_read(AM_INPUT_KEYBRD, &event);
+
+  if(event.keycode == AM_KEY_ESCAPE && event.keydown) {
+    halt(0);
+  }
+
   if (event.keycode != AM_KEY_NONE && event.keydown) {
     puts("Key pressed: ");
     puts(key_names[event.keycode]);
@@ -25,14 +32,24 @@ void print_key() {
   }
 }
 
-static void draw_tile(int x, int y, int w, int h, uint32_t color) {
-  uint32_t pixels[w * h]; // WARNING: large stack-allocated memory
+static void get_point(int *picX, int *picY, int pixelX, int pixelY) {
+  *picX = picW / w * pixelX;
+  *picY = picH / h * pixelY;
+}
+
+static void draw_tile(int x, int y, int tileW, int tileH) {
+  uint32_t pixels[tileW * tileW]; // WARNING: large stack-allocated memory
   AM_GPU_FBDRAW_T event = {
-    .x = x, .y = y, .w = w, .h = h, .sync = 1,
+    .x = x, .y = y, .w = tileW, .h = tileH, .sync = 1,
     .pixels = pixels,
   };
-  for (int i = 0; i < w * h; i++) {
-    pixels[i] = color;
+  for(int i = 0; i < tileH; i++) {
+    for(int j = 0; j < tileW; j++) {
+      int picX, picY;
+      get_point(&picX, &picY, x + j, y + i);
+      assert(picX + picY * w < picH * picW);
+      pixels[i * tileW + j] = picture[picX + picY * w];
+    }
   }
   ioe_write(AM_GPU_FBDRAW, &event);
 }
@@ -43,11 +60,9 @@ void splash() {
   w = info.width;
   h = info.height;
 
-  for (int x = 0; x * SIDE <= w; x ++) {
-    for (int y = 0; y * SIDE <= h; y++) {
-      if ((x & 1) ^ (y & 1)) {
-        draw_tile(x * SIDE, y * SIDE, SIDE, SIDE, 0xffffff); // white
-      }
+  for (int x = 0; x * SIDE < w; x ++) {
+    for (int y = 0; y * SIDE < h; y++) {
+      draw_tile(x * SIDE, y * SIDE, SIDE, SIDE);
     }
   }
 }
@@ -70,7 +85,7 @@ int main(const char *args) {
   puts("\"\n");
 
   #ifdef DEBUG
-  unittest();
+  //unittest();
   #endif
 
   splash();
