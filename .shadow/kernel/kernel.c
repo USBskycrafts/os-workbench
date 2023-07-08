@@ -2,14 +2,12 @@
 #include <amdev.h>
 #include <klib.h>
 #include <klib-macros.h>
+#include "picture.h"
 
 #define SIDE 16
-#define picW 640
-#define picH 480 // Picture size
 
 static int w, h;  // Screen size
 
-static uint32_t picture[picW * picW];
 
 #define KEYNAME(key) \
   [AM_KEY_##key] = #key,
