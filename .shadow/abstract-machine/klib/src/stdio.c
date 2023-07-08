@@ -72,7 +72,7 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
           itoa(buf, d, 16);
           strcpy(&out[cnt], "0x");
           strcat(&out[cnt], buf);
-          cnt += strlen(buf);
+          cnt += strlen(buf) + 2;
           break;
         }
         case 'p': {
@@ -81,7 +81,7 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
           itoa(buf, p, 16);
           strcpy(&out[cnt], "0x");
           strcat(&out[cnt], buf);
-          cnt += strlen(buf);
+          cnt += strlen(buf) + 2;
           break;
         }
         case 's': {
