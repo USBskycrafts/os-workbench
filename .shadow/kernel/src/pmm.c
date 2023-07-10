@@ -47,7 +47,12 @@ static void *kalloc(size_t size) {
 }
 
 static void kfree(void *ptr) {
-
+  node_t* cur = ptr;
+  if(cur->next == (node_t*)MAGIC) {
+    char warn[26] = "free after free at ";
+    sprintf(warn, "%p", ptr);
+    panic(warn);
+  }
 }
 
 static void pmm_init() {
