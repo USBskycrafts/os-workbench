@@ -3,6 +3,9 @@
 #define MAGIC 0xff // warning: cannot overlap with physical address
 #define MAX_CPU 8
 
+
+#define cpu_id cpu_current() % MAX_CPU
+
 static size_t alias(size_t size) {
   if(size == 0) {
     return 0;
@@ -56,7 +59,8 @@ static bool find_addr(node_t *cur) {
 
 static void insert(node_t *n) {
 
-  node_t **cur = &head[cpu_current()];
+  node_t **cur = &head[cpu_id];
+  while(atomic_xchg(&head[cpu_id]->lock, 1));
   addr = n;
   iterate(cur, find_addr);
 
@@ -64,6 +68,7 @@ static void insert(node_t *n) {
   n->prev = *prev;
   (*prev) = n;
   n->next = (*cur);
+  head[cpu_id]->lock = 0;
 }
 
 // closure
@@ -96,7 +101,7 @@ static void *kalloc(size_t size) {
   size = alias(size);
 
   msize = size;
-  node_t **ptr = &head[cpu_current()];
+  node_t **ptr = &head[cpu_id];
   if(iterate(ptr, find_greater) != NULL) {
     remove(ptr);
     (*ptr)->size = size;
@@ -117,7 +122,7 @@ static void pmm_init() {
   printf("Got %d MiB heap: [%p, %p)\n", pmsize >> 20, heap.start, heap.end);
   uintptr_t pusize = pmsize / cpu_count();
   if(cpu_current() == 0) {
-    for(int i = 0; i < cpu_count(); i++) {
+    for(int i = 0; i < (cpu_count() > MAX_CPU ? MAX_CPU : cpu_count()); i++) {
       head[i] = (node_t*) heap.start + i * pusize;
       head[i]->size = pusize - sizeof(node_t);
       head[i]->lock = 0;
