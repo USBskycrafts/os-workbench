@@ -60,13 +60,7 @@ static bool find_address(node_t *cur) {
 
 static void kfree(void *ptr) {
   node_t* cur = ptr - sizeof(node_t);
-  if(cur->next !=  (node_t*) MAGIC) {
-    char err[35] = "free after free at";
-    char addr[12];
-    sprintf(addr, " %p\n", ptr);
-    strcat(err, addr);
-    panic(err);
-  }
+  assert(cur->next != (node_t*)MAGIC);
   fnode = cur;
   node_t *ipt = iterate(head, find_address);
   cur->next = ipt->next;
