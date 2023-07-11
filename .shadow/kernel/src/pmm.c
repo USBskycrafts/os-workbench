@@ -1,7 +1,6 @@
 #include <common.h>
 
-
-#define MAGIC 0xff
+#define MAGIC 0xff // warning: MAGIC must not alias to physical address
 
 typedef struct __node_t {
     int              size;
@@ -39,20 +38,40 @@ static void *kalloc(size_t size) {
   msize = size;
   if((cur = iterate(head, find_greater)) != NULL) {
     void* ret = (void*) cur + sizeof(node_t);
+    //wrong, need bug fixing
     head = cur->next;
-    cur->next = (node_t*)0xff;
+    cur->next = (node_t*)MAGIC;
+    //----------------------
     return ret;
   }
   return NULL;
 }
 
-static void kfree(void *ptr) {
-  node_t* cur = ptr;
-  if(cur->next == (node_t*)MAGIC) {
-    char warn[26] = "free after free at ";
-    sprintf(warn, "%p", ptr);
-    panic(warn);
+//**************************************
+// closure
+static node_t* fnode;
+static bool find_address(node_t *cur) {
+  if(cur->next > fnode && cur < fnode) {
+    return true;
   }
+  return false;
+}
+//**************************************
+
+static void kfree(void *ptr) {
+  node_t* cur = ptr - sizeof(node_t);
+  if(cur->next !=  (node_t*) MAGIC) {
+    char err[35] = "free after free at";
+    char addr[12];
+    sprintf(addr, " %p\n", ptr);
+    strcat(err, addr);
+    panic(err);
+  }
+  fnode = cur;
+  node_t *ipt = iterate(head, find_address);
+  cur->next = ipt->next;
+  ipt->next = cur;
+  //then merging ipt, cur, cur->next if possible
 }
 
 static void pmm_init() {
