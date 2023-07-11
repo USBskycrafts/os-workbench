@@ -1,6 +1,7 @@
 #include <common.h>
 
 #define MAGIC 0xff // warning: cannot overlap with physical address
+#define MAX_CPU 8
 
 static size_t alias(size_t size) {
   if(size == 0) {
@@ -20,7 +21,7 @@ typedef struct __node_t {
     struct __node_t *prev;
 } node_t;
 
-static node_t *head;
+static node_t *head[MAX_CPU];
 
 
 static node_t *iterate(node_t **head, bool (*fun)(node_t*)) {
@@ -55,7 +56,7 @@ static bool find_addr(node_t *cur) {
 
 static void insert(node_t *n) {
 
-  node_t **cur = &head;
+  node_t **cur = &head[cpu_current()];
   addr = n;
   iterate(cur, find_addr);
 
@@ -95,7 +96,7 @@ static void *kalloc(size_t size) {
   size = alias(size);
 
   msize = size;
-  node_t **ptr = &head;
+  node_t **ptr = &head[cpu_current()];
   if(iterate(ptr, find_greater) != NULL) {
     remove(ptr);
     (*ptr)->size = size;
@@ -114,11 +115,16 @@ static void kfree(void *ptr) {
 static void pmm_init() {
   uintptr_t pmsize = ((uintptr_t)heap.end - (uintptr_t)heap.start);
   printf("Got %d MiB heap: [%p, %p)\n", pmsize >> 20, heap.start, heap.end);
-  head = (node_t*) heap.start;
-  head->size = pmsize - sizeof(node_t);
-  head->lock = 0;
-  head->prev = NULL;
-  head->next = NULL;
+  uintptr_t pusize = pmsize / cpu_count();
+  if(cpu_current() == 0) {
+    for(int i = 0; i < cpu_count(); i++) {
+      head[i] = (node_t*) heap.start + i * pusize;
+      head[i]->size = pusize - sizeof(node_t);
+      head[i]->lock = 0;
+      head[i]->prev = NULL;
+      head[i]->next = NULL;
+    }
+  }
 }
 
 MODULE_DEF(pmm) = {
