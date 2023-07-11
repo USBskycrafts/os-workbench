@@ -14,7 +14,5 @@ image: git
 QEMUFLAGS += -m 256M -smp 1
 
 
-go:
-	qemu-system-x86_64 $(QEMUFLAGS) -nographic build/kernel-x86_64-qemu
 test:
-	qemu-system-x86_64 $(QEMUFLAGS) -S -s -serial none -nographic build/kernel-x86_64-qemu
+	qemu-system-x86_64 $(QEMUFLAGS) -S -s build/kernel-x86_64-qemu
