@@ -50,7 +50,7 @@ static void pmm_init() {
       heaps[i].head->next = NULL;
     }
     for(int i = 0; i < cpu_count(); i++) {
-      printf("cpu %d, heap size : %x\n", cpu_current(), heaps[i % MAXCPU].head->size);
+      printf("cpu %d, heap size : %d MiB\n", cpu_current(), heaps[i % MAXCPU].head->size >> 20);
     }
   }
 }
