@@ -41,7 +41,7 @@ static void pmm_init() {
   node_t *ptr_16MiB = slab[23].head;
   while(ptr_16MiB < (node_t*)heap.end) {
     ptr_16MiB->isfree = 1;
-    ptr_16MiB->size = MIN((uint64_t)1 << 24, (uintptr_t)heap.end - (uintptr_t)ptr_16MiB);
+    ptr_16MiB->size = MIN(1 << 24, (uintptr_t)heap.end - (uintptr_t)ptr_16MiB);
     ptr_16MiB->next = (node_t*)((char*)ptr_16MiB + (1 << 24) + sizeof(node_t));
     printf("a node at %p, node size is %d\n", ptr_16MiB, ptr_16MiB->size);
     ptr_16MiB = ptr_16MiB->next;
