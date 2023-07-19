@@ -1,5 +1,14 @@
 #include <common.h>
 #define INDEX2SIZE(index) (1 << (index + 1))
+#define SIZE2INDEX(size) ({    \
+  size_t msize = (size);       \
+  int cnt = 0;                 \
+  while(msize >> 1) {          \
+    cnt++;                     \
+    msize >>= 1;               \
+  }                            \
+  cnt;                         \
+})                             \
 
 typedef struct _node_t {
   bool isfree;
@@ -57,7 +66,7 @@ static void pmm_init() {
     ptr = ptr->next;
   }
   // make full use of the rest space
-  for(int i = 22; i >= 0; i--) {
+  for(int i = 22; i >= SIZE2INDEX(sizeof(node_t)); i--) {
     slab[i].lock = 0;
     if((uintptr_t)ptr + INDEX2SIZE(i) < (uintptr_t)heap.end) {
       slab[i].head = ptr;
