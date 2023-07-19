@@ -1,13 +1,14 @@
 #include <common.h>
 #define INDEX2SIZE(index) (1 << (index + 1))
 #define SIZE2INDEX(size) ({    \
+  assert((size) != 0);         \
   size_t msize = (size);       \
   int cnt = 0;                 \
   while(msize >> 1) {          \
     cnt++;                     \
     msize >>= 1;               \
   }                            \
-  cnt;                         \
+  cnt - 1;                     \
 })                             \
 
 typedef struct _node_t {
