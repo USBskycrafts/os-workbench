@@ -106,6 +106,7 @@ static void pmm_init() {
   for(int i = 22; i >= SIZE2INDEX(sizeof(node_t)); i--) {
     slab[i].lock = 0;
     if((uintptr_t)ptr + INDEX2SIZE(i) < (uintptr_t)heap.end) {
+      assert(SIZE2INDEX(INDEX2SIZE(i)) == i);
       slab[i].head = ptr;
       printf("now init %x node\n", INDEX2SIZE(i));
       while((uintptr_t)ptr + INDEX2SIZE(i) < (uintptr_t)heap.end) {
