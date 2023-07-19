@@ -38,6 +38,7 @@ static void pmm_init() {
   uintptr_t pmsize = ((uintptr_t)heap.end - (uintptr_t)heap.start);
   printf("Got %d MiB heap: [%p, %p)\n", pmsize >> 20, heap.start, heap.end);
   slab[23].head = heap.start;
+  slab[23].lock = 0;
   node_t *ptr = slab[23].head;
   while((uintptr_t)ptr + (1 << 24) < (uintptr_t)heap.end) {
     ptr->isfree = 1;
@@ -46,6 +47,7 @@ static void pmm_init() {
     ptr = ptr->next;
   }
   for(int i = 22; i >= 0; i--) {
+    slab[i].lock = 0;
     if((uintptr_t)ptr + (1 << (i + 1)) < (uintptr_t)heap.end) {
       slab[i].head = ptr;
       printf("now init %x node\n", 1 << (i + 1));
