@@ -1,34 +1,31 @@
 #include <common.h>
 
-#define MAXCPU 8
-#define cpuid cpu_current() % MAXCPU
-
-typedef struct __node_t {
-  size_t size;
-  struct __node_t *prev;
-  struct __node_t *next;
+typedef struct _node_t {
+  bool isfree;
+  union {
+    size_t size;
+    struct _node_t *next;
+  };
 } node_t;
 
-
-node_t *iterate(node_t *head, bool (*fun)(node_t*)) {
-  node_t *cur = head;
-  while(cur) {
-    if(fun(cur)) {
-      return cur;
-    }
-    cur = cur->next;
-  }
-  return cur;
-}
-
-// closure: remove
-
-struct {
+typedef struct {
   int lock;
   node_t *head;
-} heaps[MAXCPU];
+} slab_t;
+
+slab_t slab[24];
 
 
+void list_push_front(node_t **head, node_t *new) {
+  new->next = (*head);
+  (*head) = new;
+}
+
+node_t *list_pop_front(node_t **head) {
+    node_t *ret = (*head);
+    (*head) = (*head)->next;
+    return ret;
+}
 
 static void *kalloc(size_t size) {
   return NULL;
@@ -40,18 +37,14 @@ static void kfree(void *ptr) {
 static void pmm_init() {
   uintptr_t pmsize = ((uintptr_t)heap.end - (uintptr_t)heap.start);
   printf("Got %d MiB heap: [%p, %p)\n", pmsize >> 20, heap.start, heap.end);
-  uintptr_t pusize = pmsize / (MAXCPU > cpu_count() ? cpu_count() : MAXCPU);
-  if(cpu_current() == 0) {
-    for(int i = 0; i < (MAXCPU < cpu_count() ? MAXCPU : cpu_count()); i++) {
-      heaps[i].head = heap.start + i * pusize;
-      heaps[i].lock = 0;
-      heaps[i].head->size = pusize - sizeof(node_t);
-      heaps[i].head->prev = NULL;
-      heaps[i].head->next = NULL;
-    }
-    for(int i = 0; i < cpu_count(); i++) {
-      printf("cpu %d, heap size : %d MiB\n", cpu_current(), heaps[i % MAXCPU].head->size >> 20);
-    }
+  slab[23].head = heap.start;
+  node_t *ptr_16MiB = slab[23].head;
+  while(ptr_16MiB < (node_t*)heap.end) {
+    printf("a 16MiB node at %p", ptr_16MiB);
+    ptr_16MiB->isfree = 1;
+    ptr_16MiB->size = 1 << 24;
+    ptr_16MiB->next = (node_t*)((char*)ptr_16MiB + (1 << 24) + sizeof(node_t));
+    ptr_16MiB = ptr_16MiB->next;
   }
 }
 
