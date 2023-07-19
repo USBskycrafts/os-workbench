@@ -43,7 +43,7 @@ static void pmm_init() {
     ptr_16MiB->isfree = 1;
     ptr_16MiB->size = MIN((uint64_t)1 << 24, (uint64_t)(heap.end - (uintptr_t)ptr_16MiB));
     ptr_16MiB->next = (node_t*)((char*)ptr_16MiB + (1 << 24) + sizeof(node_t));
-     printf("a node at %p\n, node size is %u", ptr_16MiB, ptr_16MiB->size);
+     printf("a node at %p\n, node size is %d", ptr_16MiB, ptr_16MiB->size);
     ptr_16MiB = ptr_16MiB->next;
   }
 }
