@@ -23,7 +23,7 @@ typedef struct {
   node_t *head;
 } slab_t;
 
-slab_t slab[24];
+slab_t slab[24]; // size at index i is SIZE2INDEX(i) - sizeof(node_t)
 
 
 void list_push_front(node_t **head, node_t *new) {
@@ -32,17 +32,52 @@ void list_push_front(node_t **head, node_t *new) {
 }
 
 node_t *list_pop_front(node_t **head) {
-    node_t *ret = (*head);
-    (*head) = (*head)->next;
-    return ret;
+  node_t *ret = (*head);
+  (*head) = (*head)->next;
+  return ret;
+}
+
+node_t *list_remove(node_t **head, node_t *target) {
+  node_t **cur = head;
+  while(*cur != NULL && *cur != target) {
+    cur = &((*cur)->next);
+  }
+  assert(*cur != NULL);
+  node_t *next = (*cur)->next;
+  (*cur) = next;
+  return *cur;
 }
 
 node_t *node_split(size_t index) {
   return NULL;
 }
 
+// if able to merge, return the new node's address, else return itself
 node_t *node_merge(node_t *prev) {
-  return NULL;
+  // must first mark prev as free in the caller
+  assert(prev->isfree == 1);
+
+  size_t size = prev->size + sizeof(node_t);
+  size_t index = SIZE2INDEX(size);
+  node_t *buddy = (node_t*)((uintptr_t)(prev) ^ (1 << (index + 1)));
+  printf("merge %x node, prev is %p, buddy is %p", size, prev, buddy);
+  if(buddy->isfree) {
+    // remove buddy from the slab
+    // TODO
+
+    // build the merged node
+    node_t *ret = (node_t*)((uintptr_t)prev & (1 << (index + 1)));
+    ret->isfree = 1;
+    ret->size = size * 2 - sizeof(node_t);
+
+    // insert ret to the slab
+    list_push_front(&(slab[index].head), ret);
+
+    printf("node %p is able to merge, return node %p, size %x", prev, ret, ret->size);
+    return ret;
+  } else {
+    return prev;
+  }
 }
 
 static void *kalloc(size_t size) {
