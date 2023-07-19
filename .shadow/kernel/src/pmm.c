@@ -38,12 +38,21 @@ static void pmm_init() {
   uintptr_t pmsize = ((uintptr_t)heap.end - (uintptr_t)heap.start);
   printf("Got %d MiB heap: [%p, %p)\n", pmsize >> 20, heap.start, heap.end);
   slab[23].head = heap.start;
-  node_t *ptr_16MiB = slab[23].head;
-  while((uintptr_t)ptr_16MiB + (1 << 24) < (uintptr_t)heap.end) {
-    ptr_16MiB->isfree = 1;
-    ptr_16MiB->next = (node_t*)((char*)ptr_16MiB + (1 << 24) + sizeof(node_t));
-    printf("a 16MiB node at %p\n", ptr_16MiB);
-    ptr_16MiB = ptr_16MiB->next;
+  node_t *ptr = slab[23].head;
+  while((uintptr_t)ptr + (1 << 24) < (uintptr_t)heap.end) {
+    ptr->isfree = 1;
+    ptr->next = (node_t*)((char*)ptr + (1 << 24) + sizeof(node_t));
+    printf("a 16MiB node at %p\n", ptr);
+    ptr = ptr->next;
+  }
+  for(int i = 22; i >= 0; i--) {
+    slab[i].head = ptr;
+    while((uintptr_t)ptr + (1 << (i + 1)) < (uintptr_t)heap.end) {
+      ptr->isfree = 1;
+      ptr->next = (node_t*)((char*)ptr + (1 << (i + 1)) + sizeof(node_t));
+      printf("a node at %p, size is %d\n", ptr, 1 << (i + 1));
+      ptr = ptr->next;
+    }
   }
 }
 
