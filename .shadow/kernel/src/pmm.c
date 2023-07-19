@@ -28,6 +28,14 @@ node_t *list_pop_front(node_t **head) {
     return ret;
 }
 
+node_t *node_split(size_t index) {
+  return NULL;
+}
+
+node_t *node_merge(node_t *prev) {
+  return NULL;
+}
+
 static void *kalloc(size_t size) {
   return NULL;
 }
@@ -44,7 +52,7 @@ static void pmm_init() {
   // allocate 16MiB nodes
   while((uintptr_t)ptr + INDEX2SIZE(23) < (uintptr_t)heap.end) {
     ptr->isfree = 1;
-    ptr->next = (node_t*)((char*)ptr + INDEX2SIZE(23) + sizeof(node_t));
+    ptr->next = (node_t*)((char*)ptr + INDEX2SIZE(23));
     printf("a 16MiB node at %p\n", ptr);
     ptr = ptr->next;
   }
@@ -56,7 +64,7 @@ static void pmm_init() {
       printf("now init %x node\n", INDEX2SIZE(i));
       while((uintptr_t)ptr + INDEX2SIZE(i) < (uintptr_t)heap.end) {
         ptr->isfree = 1;
-        ptr->next = (node_t*)((char*)ptr + INDEX2SIZE(i) + sizeof(node_t));
+        ptr->next = (node_t*)((char*)ptr + INDEX2SIZE(i));
         printf("\ta node at %p\n", ptr);
         ptr = ptr->next;
       }
