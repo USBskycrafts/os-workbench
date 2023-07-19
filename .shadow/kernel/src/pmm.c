@@ -50,7 +50,7 @@ static void pmm_init() {
     while((uintptr_t)ptr + (1 << (i + 1)) < (uintptr_t)heap.end) {
       ptr->isfree = 1;
       ptr->next = (node_t*)((char*)ptr + (1 << (i + 1)) + sizeof(node_t));
-      printf("a %xKiB node at %p\n", 1 << (i + 1) / (1 << 10), ptr);
+      printf("a %xB node at %p\n", 1 << (i + 1), ptr);
       ptr = ptr->next;
     }
   }
