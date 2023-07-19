@@ -45,7 +45,8 @@ node_t *list_remove(node_t **head, node_t *target) {
   assert(*cur != NULL);
   node_t *next = (*cur)->next;
   (*cur) = next;
-  return *cur;
+  target->next = NULL;
+  return target;
 }
 
 node_t *node_split(size_t index) {
@@ -63,7 +64,7 @@ node_t *node_merge(node_t *prev) {
   printf("merge %x node, prev is %p, buddy is %p", size, prev, buddy);
   if(buddy->isfree) {
     // remove buddy from the slab
-    // TODO
+    list_remove(&slab[index].head, buddy);
 
     // build the merged node
     node_t *ret = (node_t*)((uintptr_t)prev & (1 << (index + 1)));
