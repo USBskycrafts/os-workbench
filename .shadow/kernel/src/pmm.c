@@ -1,4 +1,5 @@
 #include <common.h>
+#define INDEX2SIZE(index) (1 << (index + 1))
 
 typedef struct _node_t {
   bool isfree;
@@ -40,25 +41,27 @@ static void pmm_init() {
   slab[23].head = heap.start;
   slab[23].lock = 0;
   node_t *ptr = slab[23].head;
-  while((uintptr_t)ptr + (1 << 24) < (uintptr_t)heap.end) {
+  // allocate 16MiB nodes
+  while((uintptr_t)ptr + INDEX2SIZE(23) < (uintptr_t)heap.end) {
     ptr->isfree = 1;
-    ptr->next = (node_t*)((char*)ptr + (1 << 24) + sizeof(node_t));
+    ptr->next = (node_t*)((char*)ptr + INDEX2SIZE(23) + sizeof(node_t));
     printf("a 16MiB node at %p\n", ptr);
     ptr = ptr->next;
   }
+  // make full use of the rest space
   for(int i = 22; i >= 0; i--) {
     slab[i].lock = 0;
-    if((uintptr_t)ptr + (1 << (i + 1)) < (uintptr_t)heap.end) {
+    if((uintptr_t)ptr + INDEX2SIZE(i) < (uintptr_t)heap.end) {
       slab[i].head = ptr;
-      printf("now init %x node\n", 1 << (i + 1));
-      while((uintptr_t)ptr + (1 << (i + 1)) < (uintptr_t)heap.end) {
+      printf("now init %x node\n", INDEX2SIZE(i));
+      while((uintptr_t)ptr + INDEX2SIZE(i) < (uintptr_t)heap.end) {
         ptr->isfree = 1;
-        ptr->next = (node_t*)((char*)ptr + (1 << (i + 1)) + sizeof(node_t));
+        ptr->next = (node_t*)((char*)ptr + INDEX2SIZE(i) + sizeof(node_t));
         printf("\ta node at %p\n", ptr);
         ptr = ptr->next;
       }
     } else {
-      printf("cannot init %x node\n", 1 << (i + 1));
+      printf("cannot init %x node\n", INDEX2SIZE(i));
       slab[i].head = NULL;
     }
   }
