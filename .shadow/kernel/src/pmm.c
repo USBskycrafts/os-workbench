@@ -46,12 +46,18 @@ static void pmm_init() {
     ptr = ptr->next;
   }
   for(int i = 22; i >= 0; i--) {
-    slab[i].head = ptr;
-    while((uintptr_t)ptr + (1 << (i + 1)) < (uintptr_t)heap.end) {
-      ptr->isfree = 1;
-      ptr->next = (node_t*)((char*)ptr + (1 << (i + 1)) + sizeof(node_t));
-      printf("a %xBytes node at %p\n", 1 << (i + 1), ptr);
-      ptr = ptr->next;
+    if((uintptr_t)ptr + (1 << (i + 1)) < (uintptr_t)heap.end) {
+      slab[i].head = ptr;
+      printf("now init %x node\n", 1 << (i + 1));
+      while((uintptr_t)ptr + (1 << (i + 1)) < (uintptr_t)heap.end) {
+        ptr->isfree = 1;
+        ptr->next = (node_t*)((char*)ptr + (1 << (i + 1)) + sizeof(node_t));
+        printf("a node at %p\n", ptr);
+        ptr = ptr->next;
+      }
+    } else {
+      printf("cannot init %x node\n", 1 << (i + 1));
+      slab[i].head = NULL;
     }
   }
 }
