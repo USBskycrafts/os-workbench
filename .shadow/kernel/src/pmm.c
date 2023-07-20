@@ -127,6 +127,7 @@ static void kfree(void *ptr) {
   if(node->isfree != 0) {
     panic("heap is broken");
   }
+  printf("free node %p with size %x", node, node->size);
   node->isfree = 1;
   node = node_merge(node);
   size_t index = SIZE2INDEX(node->size + sizeof(node_t));
