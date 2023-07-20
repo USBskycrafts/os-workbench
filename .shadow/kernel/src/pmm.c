@@ -70,6 +70,7 @@ node_t *node_split(node_t *prev, size_t target) {
     prev->size = size;
     size = (sizeof(node_t) + size) / 2 - sizeof(node_t);
   }
+  assert(prev->isfree == 0);
   return prev;
 }
 
