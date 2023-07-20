@@ -70,7 +70,6 @@ node_t *node_split(node_t *prev, size_t target) {
     prev->size = size;
     size = (sizeof(node_t) + size) / 2 - sizeof(node_t);
   }
-  assert(prev->isfree == 0);
   return prev;
 }
 
@@ -86,6 +85,7 @@ node_t *node_merge(node_t *prev) {
   if(buddy->isfree == 0) {
     return prev;
   }
+  assert(buddy->isfree == 1);
   while(buddy->isfree && size < INDEX2SIZE(23)) {
     // remove buddy from the slab
     printf("merge %x node, prev is %p, buddy is %p\n", size, prev, buddy);
