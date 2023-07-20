@@ -81,13 +81,13 @@ node_t *node_merge(node_t *prev) {
 
 
   size_t size = prev->size + sizeof(node_t);
-  size_t index = SIZE2INDEX(size);
-  node_t *buddy = (node_t*)PADDR(VADDR(prev) ^ INDEX2SIZE(index));
+  node_t *buddy = (node_t*)PADDR(VADDR(prev) ^ size);
   if(buddy->isfree == 0) {
     return prev;
   }
   while(buddy->isfree && size < INDEX2SIZE(23)) {
     // remove buddy from the slab
+    printf("%x\n", buddy->isfree);
     printf("merge %x node, prev is %p, buddy is %p\n", size, prev, buddy);
     list_remove(&slab[SIZE2INDEX(size)].head, buddy);
 
