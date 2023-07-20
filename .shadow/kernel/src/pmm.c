@@ -66,7 +66,7 @@ node_t *node_split(node_t *prev, size_t target) {
     node_t *next = (node_t*)((uintptr_t)prev + size + sizeof(node_t));
     printf("address of new node is %p\n", next);
     next->isfree = 1;
-    list_push_front(&(slab[SIZE2INDEX(size)].head), next);
+    list_push_front(&(slab[SIZE2INDEX(size + sizeof(node_t))].head), next);
     prev->size = size;
     size = (sizeof(node_t) + size) / 2 - sizeof(node_t);
   }
@@ -115,7 +115,6 @@ static void *kalloc(size_t size) {
       ptr->isfree = 0;
       ptr->size = INDEX2SIZE(i) - sizeof(node_t);
       ptr = node_split(ptr, size);
-      assert(ptr->isfree == 0);
       lock = 0;
       return (void*)(ptr + 1);
     }
