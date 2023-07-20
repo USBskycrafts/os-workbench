@@ -76,7 +76,10 @@ node_t *node_merge(node_t *prev) {
   size_t index = SIZE2INDEX(size);
   node_t *buddy = (node_t*)((uintptr_t)(prev) ^ (1 << (index + 1)));
   printf("merge %x node, prev is %p, buddy is %p\n", size, prev, buddy);
-  if(buddy->isfree) {
+  if(buddy->isfree == 0) {
+    return prev;
+  }
+  while(buddy->isfree && size < INDEX2SIZE(23)) {
     // remove buddy from the slab
     list_remove(&slab[index].head, buddy);
 
@@ -91,10 +94,11 @@ node_t *node_merge(node_t *prev) {
     list_push_front(&(slab[index].head), ret);
 
     printf("node %p is able to merge, return node %p, size %x\n", prev, ret, ret->size);
-    return ret;
-  } else {
-    return prev;
+    prev = ret;
+    size = ret->size;
+    buddy = (node_t*)((uintptr_t)(prev) ^ (1 << (index + 1)));
   }
+  return prev;
 }
 
 static void *kalloc(size_t size) {
