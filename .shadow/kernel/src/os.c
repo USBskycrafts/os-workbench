@@ -21,6 +21,7 @@ static void os_run() {
   //     address[index] = NULL;
   //   }
   // }
+  while(1);
 }
 
 MODULE_DEF(os) = {
