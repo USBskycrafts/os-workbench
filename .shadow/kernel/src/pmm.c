@@ -86,7 +86,6 @@ node_t *node_merge(node_t *prev) {
   while(buddy->isfree && size < INDEX2SIZE(23)) {
     // remove buddy from the slab
     printf("merge %x node, prev is %p, buddy is %p\n", size, prev, buddy);
-    printf("buddy->isfree = %d, buddy->nextt = %p\n", buddy->isfree, buddy->next);
     list_remove(&(slab[SIZE2INDEX(size)].head), buddy);
 
     // build the merged node
