@@ -17,6 +17,7 @@ static void os_run() {
       address[index] = pmm->alloc(rand() % (1 << 24));
     } else {
       pmm->free(address[index]);
+      address[index] = NULL;
     }
   }
 }
