@@ -64,9 +64,9 @@ node_t *node_split(node_t *prev, size_t target) {
   int size = (sizeof(node_t) + prev->size) / 2 - sizeof(node_t);
   while(size > target) {
     // insert second node in the buddy to free list 
-    printf("the node to be splited is %p, size is %x\n", prev, prev->size);
+    //printf("the node to be splited is %p, size is %x\n", prev, prev->size);
     node_t *next = (node_t*)((uintptr_t)prev + size + sizeof(node_t));
-    printf("address of new node is %p\n", next);
+    //printf("address of new node is %p\n", next);
     next->isfree = 1;
     list_push_front(&(slab[SIZE2INDEX(size + sizeof(node_t))].head), next);
     prev->size = size;
@@ -87,7 +87,7 @@ node_t *node_merge(node_t *prev) {
   }
   while(buddy->isfree && size < INDEX2SIZE(23)) {
     // remove buddy from the slab
-    printf("merge %x node, prev is %p, buddy is %p\n", size, prev, buddy);
+    //printf("merge %x node, prev is %p, buddy is %p\n", size, prev, buddy);
     node_t *ret = list_remove(&(slab[SIZE2INDEX(size)].head), buddy);
     if(ret == NULL) {
       break;
@@ -100,7 +100,7 @@ node_t *node_merge(node_t *prev) {
     ret->isfree = 1;
     ret->size = size * 2 - sizeof(node_t);
 
-    printf("node %p is able to merge, return node %p, size %x\n", prev, ret, ret->size);
+    //printf("node %p is able to merge, return node %p, size %x\n", prev, ret, ret->size);
     prev = ret;
     size = size * 2;
     buddy = (node_t*)PADDR(VADDR(prev) ^ size);
@@ -132,7 +132,7 @@ static void kfree(void *ptr) {
   if(node->isfree != 0) {
     panic("heap is broken");
   }
-  printf("free node %p with size %x\n", node, node->size);
+  //printf("free node %p with size %x\n", node, node->size);
   node->isfree = 1;
   node = node_merge(node);
   size_t index = SIZE2INDEX(node->size + sizeof(node_t));
