@@ -85,7 +85,6 @@ node_t *node_merge(node_t *prev) {
   if(buddy->isfree == 0) {
     return prev;
   }
-  assert(buddy->isfree == 1);
   while(buddy->isfree && size < INDEX2SIZE(23)) {
     // remove buddy from the slab
     printf("merge %x node, prev is %p, buddy is %p\n", size, prev, buddy);
@@ -116,6 +115,7 @@ static void *kalloc(size_t size) {
       ptr->isfree = 0;
       ptr->size = INDEX2SIZE(i) - sizeof(node_t);
       ptr = node_split(ptr, size);
+      assert(ptr->isfree == 0);
       lock = 0;
       return (void*)(ptr + 1);
     }
