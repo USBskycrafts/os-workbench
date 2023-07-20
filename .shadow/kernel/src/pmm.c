@@ -48,7 +48,9 @@ node_t *list_remove(node_t **head, node_t *target) {
   while(*cur != NULL && *cur != target) {
     cur = &((*cur)->next);
   }
-  assert(*cur != NULL);
+  if(*cur == NULL) {
+    return NULL;
+  }
   node_t *next = (*cur)->next;
   (*cur) = next;
   target->next = NULL;
@@ -86,10 +88,13 @@ node_t *node_merge(node_t *prev) {
   while(buddy->isfree && size < INDEX2SIZE(23)) {
     // remove buddy from the slab
     printf("merge %x node, prev is %p, buddy is %p\n", size, prev, buddy);
-    list_remove(&(slab[SIZE2INDEX(size)].head), buddy);
+    node_t *ret = list_remove(&(slab[SIZE2INDEX(size)].head), buddy);
+    if(ret == NULL) {
+      break;
+    }
 
     // build the merged node
-    node_t *ret = (node_t*)PADDR(VADDR(prev) & (~size));
+    ret = (node_t*)PADDR(VADDR(prev) & (~size));
     // ret's address should be either prev or it's buddy
     assert(ret == prev || ret == buddy);
     ret->isfree = 1;
@@ -132,7 +137,6 @@ static void kfree(void *ptr) {
   node = node_merge(node);
   size_t index = SIZE2INDEX(node->size + sizeof(node_t));
   list_push_front(&(slab[index].head), node);
-  printf("free node %p is free\n", node);
   lock = 0;
 }
 
