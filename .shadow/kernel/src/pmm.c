@@ -104,7 +104,7 @@ node_t *node_merge(node_t *prev) {
     buddy = (node_t*)PADDR(VADDR(prev) ^ INDEX2SIZE(index));
   }
   // insert ret to the slab
-  list_push_front(&(slab[index].head), prev);
+  list_push_front(&(slab[SIZE2INDEX(size / 2)].head), prev);
   return prev;
 }
 
