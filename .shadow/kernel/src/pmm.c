@@ -56,7 +56,7 @@ node_t *node_split(node_t *prev, size_t target) {
   size_t size = prev->size;
   while(size > target) {
     // insert second node in the buddy to free list 
-    printf("the node to be splited is %p, size is %x", prev, prev->size);
+    printf("the node to be splited is %p, size is %x\n", prev, prev->size);
     node_t *next = (node_t*)((uintptr_t)prev + size + sizeof(node_t));
     printf("address of new node is %p\n", next);
     next->isfree = 1;
@@ -108,6 +108,7 @@ static void *kalloc(size_t size) {
       node_t *ptr = list_pop_front(&(slab[i].head));
       ptr->isfree = 0;
       ptr->size = INDEX2SIZE(i);
+      printf("%x, %x", ptr->size, size);
       ptr = node_split(ptr, size);
       lock = 0;
       return (void*)(ptr + 1);
