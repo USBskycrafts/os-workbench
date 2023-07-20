@@ -92,7 +92,7 @@ node_t *node_merge(node_t *prev) {
     list_remove(&slab[SIZE2INDEX(size)].head, buddy);
 
     // build the merged node
-    node_t *ret = (node_t*)PADDR(VADDR(prev) & (~INDEX2SIZE(index)));
+    node_t *ret = (node_t*)PADDR(VADDR(prev) & (~size));
     // ret's address should be either prev or it's buddy
     assert(ret == prev || ret == buddy);
     ret->isfree = 1;
@@ -101,7 +101,7 @@ node_t *node_merge(node_t *prev) {
     printf("node %p is able to merge, return node %p, size %x\n", prev, ret, ret->size);
     prev = ret;
     size = size * 2;
-    buddy = (node_t*)PADDR(VADDR(prev) ^ INDEX2SIZE(index));
+    buddy = (node_t*)PADDR(VADDR(prev) ^ size);
   }
   // insert ret to the slab
   list_push_front(&(slab[SIZE2INDEX(size / 2)].head), prev);
