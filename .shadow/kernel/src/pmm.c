@@ -19,11 +19,11 @@ typedef struct _node_t {
 } node_t;
 
 typedef struct {
-  int lock;
   node_t *head;
 } slab_t;
 
 slab_t slab[24]; // size at index i is SIZE2INDEX(i) - sizeof(node_t)
+int lock;
 
 
 void list_push_front(node_t **head, node_t *new) {
@@ -102,19 +102,23 @@ node_t *node_merge(node_t *prev) {
 }
 
 static void *kalloc(size_t size) {
+  while(atomic_xchg(&lock, 1));
   for(int i = SIZE2INDEX(size); i < 24; i++) {
     if(slab[i].head != NULL) {
       node_t *ptr = list_pop_front(&(slab[i].head));
       ptr->isfree = 0;
       ptr->size = INDEX2SIZE(i);
       ptr = node_split(ptr, size);
+      lock = 0;
       return (void*)(ptr + 1);
     }
   }
+  lock = 0;
   return NULL;
 }
 
 static void kfree(void *ptr) {
+  while(atomic_xchg(&lock, 1));
   node_t *node = (node_t*)((uintptr_t)ptr - sizeof(node));
   if(node->isfree != 0) {
     panic("heap is broken\n");
@@ -123,13 +127,13 @@ static void kfree(void *ptr) {
   node = node_merge(node);
   size_t index = SIZE2INDEX(node->size);
   list_push_front(&(slab[index].head), node);
+  lock = 0;
 }
 
 static void pmm_init() {
   uintptr_t pmsize = ((uintptr_t)heap.end - (uintptr_t)heap.start);
   printf("Got %d MiB heap: [%p, %p)\n", pmsize >> 20, heap.start, heap.end);
   slab[23].head = heap.start;
-  slab[23].lock = 0;
   node_t *ptr = slab[23].head;
   // allocate 16MiB nodes
   while((uintptr_t)ptr + INDEX2SIZE(23) < (uintptr_t)heap.end) {
@@ -140,7 +144,6 @@ static void pmm_init() {
   }
   // make full use of the rest space
   for(int i = 22; i >= SIZE2INDEX(sizeof(node_t)); i--) {
-    slab[i].lock = 0;
     if((uintptr_t)ptr + INDEX2SIZE(i) < (uintptr_t)heap.end) {
       slab[i].head = ptr;
       printf("now init %x node\n", INDEX2SIZE(i));
