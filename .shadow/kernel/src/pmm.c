@@ -95,7 +95,7 @@ node_t *node_merge(node_t *prev) {
 
     printf("node %p is able to merge, return node %p, size %x\n", prev, ret, ret->size);
     prev = ret;
-    size = ret->size;
+    size = size * 2;
     buddy = (node_t*)((uintptr_t)(prev) ^ (1 << (index + 1)));
   }
   return prev;
