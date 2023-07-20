@@ -138,7 +138,7 @@ static void pmm_init() {
   slab[23].head = heap.start;
   node_t *ptr = slab[23].head;
   // allocate 16MiB nodes
-  for(int i = 0; i < (1 << (SIZE2INDEX(pmsize) - 25)); i++) {
+  for(int i = 0; i < (1 << (SIZE2INDEX(pmsize) - 24)); i++) {
     ptr->isfree = 1;
     ptr->next = (node_t*)((uintptr_t)ptr + INDEX2SIZE(23));
     printf("a 16MiB node at %p\n", ptr);
