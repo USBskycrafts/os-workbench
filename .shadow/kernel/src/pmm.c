@@ -103,7 +103,7 @@ node_t *node_merge(node_t *prev) {
 
 static void *kalloc(size_t size) {
   while(atomic_xchg(&lock, 1));
-  for(int i = SIZE2INDEX(size); i < 24; i++) {
+  for(int i = SIZE2INDEX(size + sizeof(node_t)); i < 24; i++) {
     if(slab[i].head != NULL) {
       node_t *ptr = list_pop_front(&(slab[i].head));
       ptr->isfree = 0;
