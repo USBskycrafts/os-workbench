@@ -98,7 +98,7 @@ node_t *node_merge(node_t *prev) {
     ret->isfree = 1;
     ret->size = size * 2 - sizeof(node_t);
 
-    printf("node %p is able to merge, return node %p, size %x\n", prev, ret, size * 2);
+    printf("node %p is able to merge, return node %p, size %x\n", prev, ret, ret->size);
     prev = ret;
     size = size * 2;
     buddy = (node_t*)PADDR(VADDR(prev) ^ INDEX2SIZE(index));
