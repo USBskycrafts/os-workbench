@@ -111,6 +111,14 @@ static void *kalloc(size_t size) {
 }
 
 static void kfree(void *ptr) {
+  node_t *node = (node_t*)((uintptr_t)ptr - sizeof(node));
+  if(node->isfree != 0) {
+    panic("heap is broken\n");
+  }
+  node->isfree = 1;
+  node = node_merge(node);
+  size_t index = SIZE2INDEX(node->size);
+  list_push_front(&(slab[index].head), node);
 }
 
 static void pmm_init() {
@@ -131,7 +139,6 @@ static void pmm_init() {
     slab[i].lock = 0;
     if((uintptr_t)ptr + INDEX2SIZE(i) < (uintptr_t)heap.end) {
       slab[i].head = ptr;
-      assert(SIZE2INDEX(INDEX2SIZE(i)) == i);
       printf("now init %x node\n", INDEX2SIZE(i));
       while((uintptr_t)ptr + INDEX2SIZE(i) < (uintptr_t)heap.end) {
         ptr->isfree = 1;
