@@ -61,9 +61,9 @@ node_t *node_split(node_t *prev, size_t target) {
     printf("address of new node is %p\n", next);
     next->isfree = 1;
     list_push_front(&(slab[SIZE2INDEX(size)].head), next);
+    prev->size = size;
     size = (sizeof(node_t) + size) / 2 - sizeof(node_t);
   }
-  prev->size = size;
   return prev;
 }
 
