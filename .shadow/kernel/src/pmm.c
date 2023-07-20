@@ -119,7 +119,7 @@ static void *kalloc(size_t size) {
 
 static void kfree(void *ptr) {
   while(atomic_xchg(&lock, 1));
-  node_t *node = (node_t*)((uintptr_t)ptr - sizeof(node));
+  node_t *node = (node_t*)((uintptr_t)ptr - sizeof(node_t));
   if(node->isfree != 0) {
     panic("heap is broken");
   }
