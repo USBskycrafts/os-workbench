@@ -52,7 +52,6 @@ node_t *list_remove(node_t **head, node_t *target) {
 node_t *node_split(node_t *prev, size_t target) {
   // should mark prev as used in caller and offer prev a size
   assert(prev->isfree == 0);
-  printf("%x, %x\n", prev->size, target);
   assert(prev->size >= target);
   size_t size = prev->size;
   while(size > target) {
@@ -108,7 +107,7 @@ static void *kalloc(size_t size) {
     if(slab[i].head != NULL) {
       node_t *ptr = list_pop_front(&(slab[i].head));
       ptr->isfree = 0;
-      ptr->size = INDEX2SIZE(i);
+      ptr->size = INDEX2SIZE(i) - sizeof(node_t);
       ptr = node_split(ptr, size);
       lock = 0;
       return (void*)(ptr + 1);
