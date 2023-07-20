@@ -132,6 +132,7 @@ static void kfree(void *ptr) {
   node = node_merge(node);
   size_t index = SIZE2INDEX(node->size + sizeof(node_t));
   list_push_front(&(slab[index].head), node);
+  printf("free node %p is free", node);
   lock = 0;
 }
 
