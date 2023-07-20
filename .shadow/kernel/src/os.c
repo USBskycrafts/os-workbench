@@ -21,6 +21,7 @@ static void os_run() {
   //     address[index] = NULL;
   //   }
   // }
+  printf("finished\n");
   while(1);
 }
 
