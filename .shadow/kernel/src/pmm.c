@@ -52,11 +52,10 @@ node_t *list_remove(node_t **head, node_t *target) {
 node_t *node_split(node_t *prev, size_t target) {
   // should mark prev as used in caller and offer prev a size
   assert(prev->isfree == 0 && prev->size > target);
-  printf("the node that will split is %x, and the target size is %x\n", prev->size, target);
-  printf("the node to be splited is %p\n", prev);
   size_t size = (sizeof(node_t) + prev->size) / 2 - sizeof(node_t) ;
   while(size > target) {
     // insert second node in the buddy to free list 
+    printf("the node to be splited is %p\n, size is %x", prev, prev->size);
     node_t *next = (node_t*)((uintptr_t)prev + size + sizeof(node_t));
     printf("address of new node is %p\n", next);
     next->isfree = 1;
