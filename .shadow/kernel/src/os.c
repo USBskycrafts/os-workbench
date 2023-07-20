@@ -11,7 +11,7 @@ static void os_run() {
     putch(*s == '*' ? '0' + cpu_current() : *s);
   }
   memset(address, 0, sizeof(address));
-  pmm->free(pmm->alloc(3));
+  pmm->free(pmm->alloc(300));
   // while(1) {
   //   size_t index = rand() % 1000;
   //   if(address[index] == NULL) {
