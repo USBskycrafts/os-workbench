@@ -77,8 +77,6 @@ node_t *node_split(node_t *prev, size_t target) {
 node_t *node_merge(node_t *prev) {
   // must first mark prev as free in the caller
   assert(prev->isfree == 1);
-  // TODO: merging requires subtract the heap.start offeset, which needs to be fixed
-
 
   size_t size = prev->size + sizeof(node_t);
   node_t *buddy = (node_t*)PADDR(VADDR(prev) ^ size);
