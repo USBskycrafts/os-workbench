@@ -71,6 +71,8 @@ node_t *node_split(node_t *prev, size_t target) {
 node_t *node_merge(node_t *prev) {
   // must first mark prev as free in the caller
   assert(prev->isfree == 1);
+  // TODO: merging requires subtract the heap.start offeset, which needs to be fixed
+
 
   size_t size = prev->size + sizeof(node_t);
   size_t index = SIZE2INDEX(size);
@@ -121,7 +123,6 @@ static void kfree(void *ptr) {
   while(atomic_xchg(&lock, 1));
   node_t *node = (node_t*)((uintptr_t)ptr - sizeof(node_t));
   if(node->isfree != 0) {
-    printf("%d\n", node->isfree);
     panic("heap is broken");
   }
   node->isfree = 1;
@@ -137,28 +138,18 @@ static void pmm_init() {
   slab[23].head = heap.start;
   node_t *ptr = slab[23].head;
   // allocate 16MiB nodes
-  while((uintptr_t)ptr + INDEX2SIZE(23) < (uintptr_t)heap.end) {
+  for(int i = 0; i < (1 << (SIZE2INDEX(pmsize) - 25)); i++) {
     ptr->isfree = 1;
     ptr->next = (node_t*)((uintptr_t)ptr + INDEX2SIZE(23));
     printf("a 16MiB node at %p\n", ptr);
     ptr = ptr->next;
   }
-  // make full use of the rest space
-  for(int i = 22; i >= SIZE2INDEX(sizeof(node_t)); i--) {
-    if((uintptr_t)ptr + INDEX2SIZE(i) < (uintptr_t)heap.end) {
-      slab[i].head = ptr;
-      printf("now init %x node\n", INDEX2SIZE(i));
-      while((uintptr_t)ptr + INDEX2SIZE(i) < (uintptr_t)heap.end) {
-        ptr->isfree = 1;
-        ptr->next = (node_t*)((char*)ptr + INDEX2SIZE(i));
-        printf("\ta node at %p\n", ptr);
-        ptr = ptr->next;
-      }
-    } else {
-      printf("cannot init %x node\n", INDEX2SIZE(i));
-      slab[i].head = NULL;
-    }
-  }
+  // while((uintptr_t)ptr + INDEX2SIZE(23) < (uintptr_t)heap.end) {
+  //   ptr->isfree = 1;
+  //   ptr->next = (node_t*)((uintptr_t)ptr + INDEX2SIZE(23));
+  //   printf("a 16MiB node at %p\n", ptr);
+  //   ptr = ptr->next;
+  // }
 }
 
 MODULE_DEF(pmm) = {
