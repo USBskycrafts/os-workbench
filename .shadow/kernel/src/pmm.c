@@ -100,7 +100,7 @@ node_t *node_merge(node_t *prev) {
 
     // insert ret to the slab
     list_push_front(&(slab[index].head), ret);
-
+    printf("ret is %p, ret->next is %p", ret, ret->next);
     printf("node %p is able to merge, return node %p, size %x\n", prev, ret, size * 2);
     prev = ret;
     size = size * 2;
