@@ -121,6 +121,7 @@ static void kfree(void *ptr) {
   while(atomic_xchg(&lock, 1));
   node_t *node = (node_t*)((uintptr_t)ptr - sizeof(node_t));
   if(node->isfree != 0) {
+    printf("%d\n", node->isfree);
     panic("heap is broken");
   }
   node->isfree = 1;
