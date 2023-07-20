@@ -4,9 +4,8 @@
   assert((size) != 0);         \
   size_t msize = (size);       \
   int cnt = 0;                 \
-  while(msize >> 1) {          \
+  while(msize > (1 << cnt)) {  \
     cnt++;                     \
-    msize >>= 1;               \
   }                            \
   cnt - 1;                     \
 })                             \
@@ -53,14 +52,16 @@ node_t *list_remove(node_t **head, node_t *target) {
 node_t *node_split(node_t *prev, size_t target) {
   // should mark prev as used in caller and offer prev a size
   assert(prev->isfree == 0 && prev->size > target);
-  printf("the node that will split is %x, and the target size is %x", prev->size, target);
-  size_t size = (sizeof(node_t) + prev->size) / 2;
+  printf("the node that will split is %x, and the target size is %x\n", prev->size, target);
+  printf("the node to be splited is %p", prev);
+  size_t size = (sizeof(node_t) + prev->size) / 2 - sizeof(node_t) ;
   while(size > target) {
     // insert second node in the buddy to free list 
-    node_t *next = (uintptr_t)prev + size + sizeof(node_t);
+    node_t *next = (node_t*)((uintptr_t)prev + size + sizeof(node_t));
+    printf("address of new node is %p\n", next);
     next->isfree = 1;
-    list_push_front(&(slab[SIZE2INDEX(size)]), next);
-    size = (sizeof(node_t) + prev->size) / 2;
+    list_push_front(&(slab[SIZE2INDEX(size)].head), next);
+    size = (sizeof(node_t) + size) / 2 - sizeof(node_t);
   }
   prev->size = size;
   return prev;
@@ -74,8 +75,11 @@ node_t *node_merge(node_t *prev) {
   size_t size = prev->size + sizeof(node_t);
   size_t index = SIZE2INDEX(size);
   node_t *buddy = (node_t*)((uintptr_t)(prev) ^ (1 << (index + 1)));
-  printf("merge %x node, prev is %p, buddy is %p", size, prev, buddy);
-  if(buddy->isfree) {
+  printf("merge %x node, prev is %p, buddy is %p\n", size, prev, buddy);
+  if(buddy->isfree == 0) {
+    return prev;
+  }
+  while(buddy->isfree && size < INDEX2SIZE(23)) {
     // remove buddy from the slab
     list_remove(&slab[index].head, buddy);
 
@@ -89,18 +93,36 @@ node_t *node_merge(node_t *prev) {
     // insert ret to the slab
     list_push_front(&(slab[index].head), ret);
 
-    printf("node %p is able to merge, return node %p, size %x", prev, ret, ret->size);
-    return ret;
-  } else {
-    return prev;
+    printf("node %p is able to merge, return node %p, size %x\n", prev, ret, ret->size);
+    prev = ret;
+    size = size * 2;
+    buddy = (node_t*)((uintptr_t)(prev) ^ (1 << (index + 1)));
   }
+  return prev;
 }
 
 static void *kalloc(size_t size) {
+  for(int i = SIZE2INDEX(size); i < 24; i++) {
+    if(slab[i].head != NULL) {
+      node_t *ptr = list_pop_front(&(slab[i].head));
+      ptr->isfree = 0;
+      ptr->size = INDEX2SIZE(i);
+      ptr = node_split(ptr, size);
+      return (void*)(ptr + 1);
+    }
+  }
   return NULL;
 }
 
 static void kfree(void *ptr) {
+  node_t *node = (node_t*)((uintptr_t)ptr - sizeof(node));
+  if(node->isfree != 0) {
+    panic("heap is broken\n");
+  }
+  node->isfree = 1;
+  node = node_merge(node);
+  size_t index = SIZE2INDEX(node->size);
+  list_push_front(&(slab[index].head), node);
 }
 
 static void pmm_init() {
